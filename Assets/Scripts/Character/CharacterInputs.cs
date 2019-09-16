@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
-enum eAnimationStates 
+public enum eAnimationStates 
 {
     Running = 1,
     Walk = 2, 

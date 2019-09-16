@@ -108,6 +108,10 @@ namespace Core
 					if (QLogger.CanLogWarning) QLogger.LogWarning(" Setting same state again " + newState.ToString());
 					return;
 				}
+				if ( nextState.HasValue && !nextState.Value.Equals( newState) )
+				{
+					QLogger.LogError(" We are swapping 2 states in 1 phrame (" + nextState.Value + "," + newState + "). This can cause unexpected behavior" );
+				}
 
 				if (QLogger.CanLogInfo) QLogger.LogInfo(string.Format("FSM:Queued \"{0}\" state ", newState));
 				nextState = newState;
