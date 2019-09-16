@@ -18,7 +18,11 @@ namespace Core
 				{ 
 					this.controller = controller; 
 				}
+				
+				public virtual void FixedUpdate() { }
 				public virtual void Update() { }
+				public virtual void LateUpdate() { }
+
 				public virtual void OnEnter( params object[] arguments ) { }
 				public virtual void OnExit() { }
 
@@ -116,6 +120,12 @@ namespace Core
 					statesDictionary[currentState.Value].Notify ( arguments );
 			}
 
+			public void FixedUpdate()
+			{
+				if (currentState.HasValue)
+					statesDictionary[currentState.Value].FixedUpdate();
+			}
+
 			public void Update()
 			{
 				if (nextState.HasValue)
@@ -125,6 +135,12 @@ namespace Core
 
 				if (currentState.HasValue)
 					statesDictionary[currentState.Value].Update();
+			}
+
+			public void LateUpdate()
+			{
+				if (currentState.HasValue)
+					statesDictionary[currentState.Value].LateUpdate();
 			}
 
 			void SetNextState_Internal()

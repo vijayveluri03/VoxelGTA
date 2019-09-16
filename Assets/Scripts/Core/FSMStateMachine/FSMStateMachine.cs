@@ -137,8 +137,7 @@ namespace Core
 					if (QLogger.CanLogInfo) QLogger.LogInfo(string.Format("FSM:On Enter called for \"{0}\" state ", currentState.Value));
 					statesDictionary[currentState.Value].OnEnter();
 
-					if (contextForNextState != null)
-						statesDictionary[currentState.Value].OnContext(contextForNextState);
+					statesDictionary[currentState.Value].OnContext(contextForNextState /* this can be null if there is no context */ );
 				}
 
 				//set nextState to Null

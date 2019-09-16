@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Core;
-
+ 
 public class Main : SingletonMonoBehaviour<Main>
 {
     [HideInInspector] public GameStateManager gameStateManager;

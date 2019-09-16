@@ -11,9 +11,16 @@ public class CharacterController
         Walk, 
         Jump
     }
+    public GameObject GameObject { get; private set; }
+    public Animator Animator { get; private set; }
+    public CharacterInputs Inputs { get; private set; }
 
-    public void Init ()
+    public void Init ( GameObject characterObject )
     {
+        GameObject = characterObject;
+        Animator = GameObject.GetComponent<Animator>();
+        Inputs = GameObject.GetComponent<CharacterInputs>();
+
         controller = new FSMController<CharacterController, eStates>( this );
         controller.RegisterState ( eStates.Idle, new CharacterIdle() );
         controller.RegisterState ( eStates.Walk, new CharacterIdleWalk() );
@@ -31,10 +38,21 @@ public class CharacterController
         controller.SetState ( eStates.Idle );
     }
 
+    public void FixedUpdate ()
+    {
+        if ( controller != null )
+            controller.FixedUpdate();
+    }
     public void Update ()
     {
         if ( controller != null )
             controller.Update();
+    }
+
+    public void LateUpdate () 
+    {
+        if ( controller != null )
+            controller.LateUpdate();
     }
 
     public void Notify( params object[] arguments ) 
@@ -42,5 +60,7 @@ public class CharacterController
         if ( controller != null )
             controller.Notify ( arguments );
     }
+    
     private FSMController< CharacterController, eStates> controller = null;
+
 }
