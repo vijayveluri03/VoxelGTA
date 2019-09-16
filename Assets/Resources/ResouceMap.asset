@@ -15,5 +15,11 @@ MonoBehaviour:
   Mapping:
   - obj: {fileID: 1655738039016734, guid: 6a7ca9c6eadc2413782ab1873393a6d2, type: 3}
     path: UI/UiManager
+    overridePath: 0
   - obj: {fileID: 1706197653059514, guid: 93e183c0409084cc78ca61f9d39b00b8, type: 3}
     path: UI/UIHomeScreen
+    overridePath: 0
+  - obj: {fileID: 6778376001415905232, guid: 00051cad39deb4f2aa5f391cf70e4af5, type: 3}
+    path: Characters/VoxelGirl/MainCharacter
+    overridePath: 0
+  FolderMapping: []
