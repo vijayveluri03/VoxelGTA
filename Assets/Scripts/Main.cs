@@ -21,6 +21,11 @@ public class Main : SingletonMonoBehaviour<Main>
 
     public void Update ()
     {
+        //@todo find a better place for cheats 
+        // @todo hard coded controls
+        if ( Input.GetKeyDown(KeyCode.C))
+            QLogger.ShowOrHideGUI();
+
         if ( gameStateManager != null ) gameStateManager.Update();
         if ( uIManager != null ) uIManager.DoUpdate ();
     }

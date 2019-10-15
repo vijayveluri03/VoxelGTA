@@ -14,9 +14,9 @@ namespace Core
 			Errors = 3      // prints only errors
 		}
 
-		public static void Assert ( bool logic, Object message = null )
+		public static void Assert ( bool logic, System.Object message = null )
 		{
-			Debug.Assert( logic, message);
+			Debug.Assert( logic, message != null ? message : "Asset was hit");
 		}
 		public static void SetLoggingLevel(QLogger.Level level)
 		{
@@ -45,7 +45,21 @@ namespace Core
 		{
 			Log(Level.Info, message, includeTimeStamp);
 		}
-
+		public static void LogToGUI ( int index, string message )
+		{
+			if ( GUILogger == null )
+			{
+				GUILogger = (new GameObject("QGUILogger")).AddComponent<QGUILogger>();
+			}
+			GUILogger.SetLog ( index, message );
+		}
+		public static void ShowOrHideGUI ()
+		{
+			if ( GUILogger != null )
+			{
+				GUILogger.InvertVisibility();
+			}
+		}
 		public static void Log(QLogger.Level level, string message, bool includeTimeStamp = false)
 		{
 			bool isEditorMode = IsRunningInEditorMode;
@@ -77,6 +91,7 @@ namespace Core
 
 		private static bool IsRunningInEditorMode { get { return !Application.isPlaying; } }
 		private static QLogger.Level m_logLevel = Level.Warnings;
+		private static QGUILogger GUILogger = null;
 
 	}
 }

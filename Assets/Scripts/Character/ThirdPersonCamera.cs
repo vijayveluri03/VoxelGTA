@@ -20,6 +20,10 @@ public class ThirdPersonCamera : MonoBehaviour
         
     }
 
+    public void SetCharacterToFollow ( Transform characterToFollow ) 
+    {
+        this.characterToFollow = characterToFollow;
+    }
 
     void FixedUpdate ()
     {

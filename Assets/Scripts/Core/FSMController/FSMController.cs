@@ -70,12 +70,15 @@ namespace Core
 				state.Init( this );
 				statesDictionary.Add(key, state);
 			}
-			public void AddMapping(T state1, T state2)
+			public void AddMapping(T fromState, params T[] toState)
 			{
-				if (GetKeyValueMap(state1, state2) != null) 
-					QLogger.LogErrorAndThrowException("We already have a mapping between " + state1.ToString() + state2.ToString());
+				foreach ( T NextState in toState )
+				{
+					if (GetKeyValueMap(fromState, NextState) != null) 
+						QLogger.LogErrorAndThrowException("We already have a mapping between " + fromState.ToString() + NextState.ToString());
 
-				stateMapping.Add(new MyKeyValuePair<T, T>(state1, state2));
+					stateMapping.Add(new MyKeyValuePair<T, T>(fromState, NextState));
+				}
 			}
 			public MyKeyValuePair<T, T> GetKeyValueMap(T state1, T state2)
 			{
@@ -169,6 +172,11 @@ namespace Core
 
 				//set currentState to Next
 				currentState = nextState;
+
+				//set nextState to Null
+				nextState = null;
+				contextForNextState = null;
+
 				//enter current state
 				if (currentState.HasValue)
 				{
@@ -176,9 +184,13 @@ namespace Core
 					statesDictionary[currentState.Value].OnEnter(contextForNextState);
 				}
 
-				//set nextState to Null
-				nextState = null;
-				contextForNextState = null;
+				if ( logToGUI )
+					QLogger.LogToGUI( logToGUIIndex,  currentState.HasValue ? currentState.Value.ToString() : " null " );
+			}
+			public void SetLogToGUI ( bool set, int index )
+			{
+				logToGUI = set;
+				logToGUIIndex = index;
 			}
 
 			T? previousState = null;
@@ -189,6 +201,8 @@ namespace Core
 			List<MyKeyValuePair<T, T>> stateMapping = new List<MyKeyValuePair<T, T>>();
 			System.Object[] contextForNextState = null;
 			private Owner owner;
+			private bool logToGUI = false;
+			private int logToGUIIndex = -1;
 		}
 	}
 }

@@ -13,13 +13,15 @@ public class CharacterController
         Falling 
     }
     public GameObject GameObject { get; private set; }
+    public iPlayer player { get; private set; }
     public Animator Animator { get; private set; }
     public CharacterInputs Inputs { get; private set; }
     public CharacterCommon Common { get; private set; }
 
-    public void Init ( GameObject characterObject )
+    public void Init ( GameObject characterObject, iPlayer player )
     {
         GameObject = characterObject;
+        this.player = player;
         Animator = GameObject.GetComponent<Animator>();
         Inputs = GameObject.GetComponent<CharacterInputs>();
         Common = new CharacterCommon( this );
@@ -30,23 +32,13 @@ public class CharacterController
         controller.RegisterState ( eStates.Jump, new CharacterJump() );
         controller.RegisterState ( eStates.Falling, new CharacterFalling() );
         
-        controller.AddMapping ( eStates.Idle, eStates.Jump );
-        controller.AddMapping ( eStates.Idle, eStates.Walk );
-        controller.AddMapping ( eStates.Idle, eStates.Falling );
+        controller.AddMapping ( eStates.Idle, eStates.Jump, eStates.Walk, eStates.Falling );
+        controller.AddMapping ( eStates.Walk, eStates.Jump, eStates.Idle, eStates.Falling );
+        controller.AddMapping ( eStates.Jump, eStates.Idle, eStates.Walk, eStates.Falling );
+        controller.AddMapping ( eStates.Falling, eStates.Idle, eStates.Walk, eStates.Jump );
 
-        controller.AddMapping ( eStates.Walk, eStates.Jump );
-        controller.AddMapping ( eStates.Walk, eStates.Idle );
-        controller.AddMapping ( eStates.Walk, eStates.Falling );
+        controller.SetLogToGUI( true, 1);
 
-        controller.AddMapping ( eStates.Jump, eStates.Idle );
-        controller.AddMapping ( eStates.Jump, eStates.Walk );
-        controller.AddMapping ( eStates.Jump, eStates.Falling );
-
-        controller.AddMapping ( eStates.Falling, eStates.Idle );
-        controller.AddMapping ( eStates.Falling, eStates.Walk );
-        controller.AddMapping ( eStates.Falling, eStates.Jump );
-
-        
         controller.SetState ( eStates.Idle );
     }
 

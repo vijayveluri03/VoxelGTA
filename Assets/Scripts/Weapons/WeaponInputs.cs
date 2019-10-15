@@ -3,50 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
-public enum eAnimationStates 
+public enum eWeaponType
 {
-    Running = 1,
-    Walk = 2, 
-    Jump = 3, 
-    Idle = 4
+    Rifle,
+    ASSAULT_RIFLE,
+    SHOT_GUN,
+    ROCKET_LAUNCHER,
+    GRENADE_LAUNCHER 
+    
 }
-public class CharacterInputs : MonoBehaviour
+
+public enum eShotType
+{
+    SINGLE_SHOT,
+    // BURST,
+    SEMI_AUTO,
+    FULLY_AUTO,
+
+}
+public class WeaponInputs : MonoBehaviour
 {
 
-    [Header("Forward Movement")]
-	public float movementSpeedMax;
-    public float acceleration;
-    public float dragHorizontal;
+    public float reloadTime;
+    public int magCapacity;
+    public float recoilTime;
+    public float accuracy; // 0 to 1 => 0 being least accurate
     
-    [Header("Strafing")]
-	public float strafeSpeedMax;
-    public float strafeAcceleration;
-    public float strafeDragHorizontal;
-    
+    public eShotType shotType;
+    // public int burstBulletCount;
+    // public float accuracyDeltaForBurst;
+    public float accuracyDeltaForFullAuto;
 
-    [Header("Rotation")]
-    public float mouseIntensity;
-    public float rotationSlerpSpeed;
+    public float damage;
+    public float range;
 
-    [Header("Jump and gravity ")]
-    public float jumpForceValue;
-    public float gravity = -9.8f;
-    public float dragVertical;
-    public LayerMask ground;
-
-    
-    [Header("Ground")]
-    // public Transform bottomTransform;
-    // public Transform frontTransform;
-    public Transform centerTransform;
-    public float exactDistanceToBottom;
-    public float acceptableDistanceToBottom;
-    public float exactDistanceToFront;
-
-
-
-    [Header("Weapons")]
-    public Transform weaponRoot;
+    public Transform muzzlePositionAndDirection;
+    public GameObject bulletReference;
 
 
 	// //private Rigidbody rb;
