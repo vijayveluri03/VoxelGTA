@@ -13,7 +13,7 @@ namespace Core
         {
             if (mUniqueInstance != null)
             {
-                QLogger.LogErrorAndThrowException( "Singleton [" + typeof(T) + "] cannot be manually instantiated and Singleton.Instance can only be called from the main thread.");
+                Core.QLogger.LogErrorAndThrowException( "Singleton [" + typeof(T) + "] cannot be manually instantiated and Singleton.Instance can only be called from the main thread.");
             }
         }
 
@@ -30,7 +30,7 @@ namespace Core
                 if (mUniqueInstance == null)
                 {
                     mUniqueInstance = new T();
-                    if ( QLogger.CanLogInfo ) QLogger.LogInfo (string.Format("{0} instantiated.", typeof(T)));
+                    if ( Core.QLogger.CanLogInfo ) Core.QLogger.LogInfo (string.Format("{0} instantiated.", typeof(T)));
                 }
                 return mUniqueInstance;
             }
@@ -63,7 +63,7 @@ namespace Core
 
             if (uniqueInstance != this)
             {
-                QLogger.LogErrorAndThrowException("Cannot have two instances of a SingletonMonoBehaviour "+ typeof(T).ToString() + "." );
+                Core.QLogger.LogErrorAndThrowException("Cannot have two instances of a SingletonMonoBehaviour "+ typeof(T).ToString() + "." );
             }
 
         }
@@ -93,7 +93,7 @@ namespace Core
             {
                 if (uniqueInstance == null)        // thread-safe
                 {
-                    QLogger.LogErrorAndThrowException( "ERROR: Singleton [" + typeof(T) + "] accessed before construction.  Note that this can happen if you use OnEnable as that runs at construction of your other object, possibly before this object.");
+                    Core.QLogger.LogErrorAndThrowException( "ERROR: Singleton [" + typeof(T) + "] accessed before construction.  Note that this can happen if you use OnEnable as that runs at construction of your other object, possibly before this object.");
                 }
                 return (T)uniqueInstance;
             }
@@ -106,7 +106,7 @@ namespace Core
         protected virtual void Awake()
         {
 
-            if ( QLogger.CanLogInfo ) QLogger.LogInfo ( string.Format("{0} instantiated.", typeof(T)));
+            if ( Core.QLogger.CanLogInfo ) Core.QLogger.LogInfo ( string.Format("{0} instantiated.", typeof(T)));
 
             if (uniqueInstance == null)
             {
@@ -114,7 +114,7 @@ namespace Core
             }
             else if (uniqueInstance != this)
             {
-                QLogger.LogErrorAndThrowException( "Cannot have two instances of a SingletonMonoBehaviour : " + typeof(T).ToString() + "." );
+                Core.QLogger.LogErrorAndThrowException( "Cannot have two instances of a SingletonMonoBehaviour : " + typeof(T).ToString() + "." );
             }
         }
 

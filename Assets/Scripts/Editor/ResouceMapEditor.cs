@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.IO;
 using System.Linq;
-using Core;
 
-namespace IO
+
+namespace Core
 {
 	[CustomEditor(typeof(ResourceMap))]
 	public class ResourceMapEditor : Editor
@@ -88,11 +88,11 @@ namespace IO
         public static List<ResourceMap.Map> GetAllAssetsAt(string path)
 		{
 			
-			if ( ! Directory.Exists ( Application.dataPath + "/Content/" + path ) ) 
+			if ( !Directory.Exists (UnityEngine.Application.dataPath + "/Content/" + path ) ) 
 				return null;
 
 			List<ResourceMap.Map> al = new List<ResourceMap.Map>();
-			string[] fileEntries = Directory.GetFiles(Application.dataPath + "/Content/" + path);
+			string[] fileEntries = Directory.GetFiles(UnityEngine.Application.dataPath + "/Content/" + path);
 			foreach (string fileName in fileEntries)
 			{
 				ResourceMap.Map newMap = new ResourceMap.Map();

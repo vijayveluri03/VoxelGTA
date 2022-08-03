@@ -42,12 +42,12 @@ namespace Core
 			if (panelInstance == null)
 			{
 				UIPanelInfo panelInfo = GetPanelReference(screenName);
-				if (panelInfo == null) QLogger.LogErrorAndThrowException("No screen found with name:" + screenName);
-				if (panelInfo.type != UIPanelInfo.Type.GamePlay) QLogger.LogErrorAndThrowException("This panel is not a screen type");
+				if (panelInfo == null) Core.QLogger.LogErrorAndThrowException("No screen found with name:" + screenName);
+				if (panelInfo.type != UIPanelInfo.Type.GamePlay) Core.QLogger.LogErrorAndThrowException("This panel is not a screen type");
 				panelInstance = CreatePanelInstanceAndAddToListIfNess(panelInfo);
-				if (panelInstance == null) QLogger.LogErrorAndThrowException("Panel instance was not created!");
+				if (panelInstance == null) Core.QLogger.LogErrorAndThrowException("Panel instance was not created!");
 			}
-			if (!(panelInstance is GamePlayScreenPanelInstance)) QLogger.LogErrorAndThrowException("This panel is not screen type - 2");
+			if (!(panelInstance is GamePlayScreenPanelInstance)) Core.QLogger.LogErrorAndThrowException("This panel is not screen type - 2");
 			GamePlayScreenPanelInstance screenInstance = panelInstance as GamePlayScreenPanelInstance;
 
 			if (!gamePlayScreenPanels.Contains(screenInstance))
@@ -65,12 +65,12 @@ namespace Core
 			if (panelInstance == null)
 			{
 				UIPanelInfo panelInfo = GetPanelReference(screenName);
-				if (panelInfo == null) QLogger.LogErrorAndThrowException("No screen found with name:" + screenName);
-				if (panelInfo.type != UIPanelInfo.Type.Screen) QLogger.LogErrorAndThrowException("This panel is not a screen type");
+				if (panelInfo == null) Core.QLogger.LogErrorAndThrowException("No screen found with name:" + screenName);
+				if (panelInfo.type != UIPanelInfo.Type.Screen) Core.QLogger.LogErrorAndThrowException("This panel is not a screen type");
 				panelInstance = CreatePanelInstanceAndAddToListIfNess(panelInfo);
-				if (panelInstance == null) QLogger.LogErrorAndThrowException("Panel instance was not created!");
+				if (panelInstance == null) Core.QLogger.LogErrorAndThrowException("Panel instance was not created!");
 			}
-			if (!(panelInstance is ScreenPanelInstance)) QLogger.LogErrorAndThrowException("This panel is not screen type - 2");
+			if (!(panelInstance is ScreenPanelInstance)) Core.QLogger.LogErrorAndThrowException("This panel is not screen type - 2");
 			ScreenPanelInstance screenInstance = panelInstance as ScreenPanelInstance;
 
 			if (screenPanelStack.Count > 0)
@@ -121,7 +121,7 @@ namespace Core
 
 		public void ShowLoadingScreen(bool show)
 		{
-			QLogger.LogError("NYI");
+			Core.QLogger.LogError("NYI");
 		}
 
 		public UIPanelInstance GetPanelInstance(string screenName)
@@ -148,9 +148,9 @@ namespace Core
 				return GetPanelInstance(panel.panelName);
 
 			if (panel.uiObjectReference == null)
-				panel.uiObjectReference = ResourceManager.Instance.LoadAsset<UnityEngine.Object>(panel.objectPath);
+				panel.uiObjectReference = Core.ResourceManager.Instance.LoadAsset<UnityEngine.Object>(panel.objectPath);
 
-			if (panel.uiObjectReference == null) QLogger.LogErrorAndThrowException("Panel object not found!");
+			if (panel.uiObjectReference == null) Core.QLogger.LogErrorAndThrowException("Panel object not found!");
 
 			GameObject instance = GameObject.Instantiate(panel.uiObjectReference, new Vector3(9999, 9999, 9999), Quaternion.identity, transform) as GameObject;
 			instance.SetActive(false);
@@ -161,18 +161,18 @@ namespace Core
 			else if (panel.type == UIPanelInfo.Type.Popup) panelInstance = new PopupPanelInstance();
 			else if (panel.type == UIPanelInfo.Type.Alert) panelInstance = new AlertPanelInstance();
 			else if (panel.type == UIPanelInfo.Type.GamePlay) panelInstance = new GamePlayScreenPanelInstance();
-			else QLogger.LogErrorAndThrowException("Should not be here !");
+			else Core.QLogger.LogErrorAndThrowException("Should not be here !");
 
 			panelInstance.panelInfo = panel;
 			panelInstance.instance = instance;
 			panelInstance.uiPanel = instance.GetComponent<UIPanel>();
-			if (panelInstance.uiPanel == null) QLogger.LogErrorAndThrowException("Ui panel instance not found ");
+			if (panelInstance.uiPanel == null) Core.QLogger.LogErrorAndThrowException("Ui panel instance not found ");
 			panelsInMemory.Add(panelInstance);
 			return panelInstance;
 		}
 		public void CloseUiPanelAndRemoveFromListIfNess(UIPanelInstance instance)
 		{
-			if (instance == null) { QLogger.LogErrorAndThrowException("panel instance is null"); return; }
+			if (instance == null) { Core.QLogger.LogErrorAndThrowException("panel instance is null"); return; }
 
 			if (instance.panelInfo.keepInMemory)
 			{

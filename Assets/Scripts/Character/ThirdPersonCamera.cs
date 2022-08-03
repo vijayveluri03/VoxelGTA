@@ -2,48 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonCamera : MonoBehaviour
+namespace GTA
 {
-    [SerializeField] Transform characterToFollow;
-    [SerializeField] Vector3 offsetDistance;
-    
-	public float movementSpeed;
-    public float rotationSpeed;
+    public class ThirdPersonCamera : MonoBehaviour
+    {
+        [SerializeField] Transform characterToFollow;
+        [SerializeField] Vector3 offsetDistance;
+
+        public float movementSpeed;
+        public float rotationSpeed;
 
 
         private Vector3 moveTo;
-    private Quaternion slerpTo;
+        private Quaternion slerpTo;
 
 
-    void Start()
-    {
-        
-    }
+        void Start()
+        {
 
-    public void SetCharacterToFollow ( Transform characterToFollow ) 
-    {
-        this.characterToFollow = characterToFollow;
-    }
+        }
 
-    void FixedUpdate ()
-    {
-        if ( characterToFollow == null )
-            return;
+        public void SetCharacterToFollow(Transform characterToFollow)
+        {
+            this.characterToFollow = characterToFollow;
+        }
 
-        Vector3 currenctOffset = characterToFollow.transform.localToWorldMatrix.MultiplyVector( offsetDistance );
-        
-        moveTo =  characterToFollow.position + currenctOffset;
-        slerpTo = Quaternion.LookRotation ( characterToFollow.position - transform.position, Vector3.up);
-        transform.LookAt ( characterToFollow, Vector3.up );
+        void FixedUpdate()
+        {
+            if (characterToFollow == null)
+                return;
+
+            Vector3 currenctOffset = characterToFollow.transform.localToWorldMatrix.MultiplyVector(offsetDistance);
+
+            moveTo = characterToFollow.position + currenctOffset;
+            slerpTo = Quaternion.LookRotation(characterToFollow.position - transform.position, Vector3.up);
+            transform.LookAt(characterToFollow, Vector3.up);
 
 
 
-        transform.position = ( Vector3.Slerp ( transform.position, moveTo, movementSpeed * Time.fixedDeltaTime ) );
-        transform.rotation = Quaternion.Slerp ( transform.rotation, slerpTo, rotationSpeed * Time.fixedDeltaTime );
-    }
+            transform.position = (Vector3.Slerp(transform.position, moveTo, movementSpeed * Time.fixedDeltaTime));
+            transform.rotation = Quaternion.Slerp(transform.rotation, slerpTo, rotationSpeed * Time.fixedDeltaTime);
+        }
 
-    Vector3 MultiplyVectors ( Vector3 a, Vector3 b )
-    {
-        return new Vector3 ( a.x * b.x, a.y * b.y, a.z * b.z );
+        Vector3 MultiplyVectors(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+        }
     }
 }

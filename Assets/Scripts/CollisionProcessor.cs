@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionProcessor 
+namespace GTA
+{
+    public class CollisionProcessor 
 {
     // Collision processor needs access to session as it needs to process multiple things in the future 
-    public void Init( FrontendState session )
+    public void Init( InGameState session )
     {
         this.session = session;
     }
@@ -34,5 +36,6 @@ public class CollisionProcessor
         }
     }
 
-    private FrontendState session;
+    private InGameState session;
+}
 }

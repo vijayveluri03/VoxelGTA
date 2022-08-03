@@ -18,7 +18,7 @@ namespace Core
 		{
 			Debug.Assert( logic, message != null ? message : "Asset was hit");
 		}
-		public static void SetLoggingLevel(QLogger.Level level)
+		public static void SetLoggingLevel(Core.QLogger.Level level)
 		{
 			m_logLevel = level;
 		}
@@ -43,7 +43,8 @@ namespace Core
 		public static bool CanLogInfo { get { return m_logLevel <= Level.Info || IsRunningInEditorMode; } }
 		public static void LogInfo(string message, bool includeTimeStamp = false)
 		{
-			Log(Level.Info, message, includeTimeStamp);
+            if(CanLogInfo)
+    			Log(Level.Info, message, includeTimeStamp);
 		}
 		public static void LogToGUI ( int index, string message )
 		{
@@ -60,23 +61,23 @@ namespace Core
 				GUILogger.InvertVisibility();
 			}
 		}
-		public static void Log(QLogger.Level level, string message, bool includeTimeStamp = false)
+		public static void Log(Core.QLogger.Level level, string message, bool includeTimeStamp = false)
 		{
 			bool isEditorMode = IsRunningInEditorMode;
 			if (includeTimeStamp)
 				message = "[Time:" + Time.realtimeSinceStartup + "]" + message;
 
-			if (level == QLogger.Level.Info)
+			if (level == Core.QLogger.Level.Info)
 			{
 				if (m_logLevel <= level || isEditorMode)
 					Debug.Log("[QLearningSpace:Info] " + message);
 			}
-			else if (level == QLogger.Level.Warnings)
+			else if (level == Core.QLogger.Level.Warnings)
 			{
 				if (m_logLevel <= level || isEditorMode)
 					Debug.LogWarning("[QLearningSpace:Warn] " + message);
 			}
-			else if (level == QLogger.Level.Errors)
+			else if (level == Core.QLogger.Level.Errors)
 			{
 				Debug.LogError("[QLearningSpace:Err] " + message);
 			}
@@ -89,8 +90,8 @@ namespace Core
 
 		public static float DrawLineDuration { get; private set; }
 
-		private static bool IsRunningInEditorMode { get { return !Application.isPlaying; } }
-		private static QLogger.Level m_logLevel = Level.Warnings;
+		private static bool IsRunningInEditorMode { get { return !UnityEngine.Application.isPlaying; } }
+		private static Core.QLogger.Level m_logLevel = Level.Warnings;
 		private static QGUILogger GUILogger = null;
 
 	}

@@ -49,7 +49,7 @@ namespace Core
 			{
 				if (!typeof(T).IsEnum)
 				{
-					QLogger.LogErrorAndThrowException("Error. TEnum must be an enum.");
+					Core.QLogger.LogErrorAndThrowException("Error. TEnum must be an enum.");
 					return;
 				}
 				this.owner = owner;
@@ -64,7 +64,7 @@ namespace Core
 			{
 				if (statesDictionary.ContainsKey(key))
 				{
-					QLogger.LogErrorAndThrowException("Already contains key " + key.ToString());
+					Core.QLogger.LogErrorAndThrowException("Already contains key " + key.ToString());
 				}
 
 				state.Init( this );
@@ -75,7 +75,7 @@ namespace Core
 				foreach ( T NextState in toState )
 				{
 					if (GetKeyValueMap(fromState, NextState) != null) 
-						QLogger.LogErrorAndThrowException("We already have a mapping between " + fromState.ToString() + NextState.ToString());
+						Core.QLogger.LogErrorAndThrowException("We already have a mapping between " + fromState.ToString() + NextState.ToString());
 
 					stateMapping.Add(new MyKeyValuePair<T, T>(fromState, NextState));
 				}
@@ -108,15 +108,15 @@ namespace Core
 			{
 				if (currentState.HasValue && currentState.Value.Equals(newState))
 				{
-					if (QLogger.CanLogWarning) QLogger.LogWarning(" Setting same state again " + newState.ToString());
+					if (Core.QLogger.CanLogWarning) Core.QLogger.LogWarning(" Setting same state again " + newState.ToString());
 					return;
 				}
 				if ( nextState.HasValue && !nextState.Value.Equals( newState) )
 				{
-					QLogger.LogError(" We are swapping 2 states in 1 phrame (" + nextState.Value + "," + newState + "). This can cause unexpected behavior" );
+					Core.QLogger.LogError(" We are swapping 2 states in 1 phrame (" + nextState.Value + "," + newState + "). This can cause unexpected behavior" );
 				}
 
-				if (QLogger.CanLogInfo) QLogger.LogInfo(string.Format("FSM:Queued \"{0}\" state ", newState));
+				if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo(string.Format("FSM:Queued \"{0}\" state ", newState));
 				nextState = newState;
 				contextForNextState = args;
 			}
@@ -156,7 +156,7 @@ namespace Core
 				{
 					if (GetKeyValueMap(currentState.Value, nextState.Value) == null)
 					{
-						QLogger.LogErrorAndThrowException("There is no mapping between " + currentState.Value.ToString() + " and " + nextState.Value.ToString());
+						Core.QLogger.LogErrorAndThrowException("There is no mapping between " + currentState.Value.ToString() + " and " + nextState.Value.ToString());
 						nextState = null;
 						return;
 					}
@@ -166,7 +166,7 @@ namespace Core
 				//exit previousState
 				if (previousState.HasValue)
 				{
-					if (QLogger.CanLogInfo) QLogger.LogInfo(string.Format("FSM:On Exit called for \"{0}\" state ", previousState.Value));
+					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo(string.Format("FSM:On Exit called for \"{0}\" state ", previousState.Value));
 					statesDictionary[previousState.Value].OnExit();
 				}
 
@@ -180,12 +180,12 @@ namespace Core
 				//enter current state
 				if (currentState.HasValue)
 				{
-					if (QLogger.CanLogInfo) QLogger.LogInfo(string.Format("FSM:On Enter called for \"{0}\" state ", currentState.Value));
+					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo(string.Format("FSM:On Enter called for \"{0}\" state ", currentState.Value));
 					statesDictionary[currentState.Value].OnEnter(contextForNextState);
 				}
 
 				if ( logToGUI )
-					QLogger.LogToGUI( logToGUIIndex,  currentState.HasValue ? currentState.Value.ToString() : " null " );
+					Core.QLogger.LogToGUI( logToGUIIndex,  currentState.HasValue ? currentState.Value.ToString() : " null " );
 			}
 			public void SetLogToGUI ( bool set, int index )
 			{

@@ -37,7 +37,7 @@ namespace Core
 		public UnityEngine.Object GetObjectAtPath(string path)
 		{
 			if (Mapping == null)
-				QLogger.LogErrorAndThrowException("Mapping is empty");
+				Core.QLogger.LogErrorAndThrowException("Mapping is empty");
 			foreach (Map map in Mapping)
 			{
 				if (map.path == path)

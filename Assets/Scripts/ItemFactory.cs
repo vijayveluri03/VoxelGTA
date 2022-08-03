@@ -2,37 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ItemFactory 
+namespace GTA
 {
-
-    // Refactor needed. just temp code
-    public static GameObject Spawn ( eInventoryItem itemOnMap )
+    public static class ItemFactory
     {
-        if ( itemOnMap == eInventoryItem.Pistol )
+
+        // Refactor needed. just temp code
+        public static GameObject Spawn(eInventoryItem itemOnMap)
         {
-            return GameObject.Instantiate (GetObject( itemOnMap ));
+            if (itemOnMap == eInventoryItem.Pistol)
+            {
+                return GameObject.Instantiate(GetObject(itemOnMap));
+            }
+            Core.QLogger.Assert(false);
+            return null;
         }
-        Core.QLogger.Assert( false );
-        return null;
-    }
 
-    public static UnityEngine.GameObject GetObject ( eInventoryItem itemOnMap )
-    {
-        if ( itemOnMap == eInventoryItem.Pistol )
+        public static UnityEngine.GameObject GetObject(eInventoryItem itemOnMap)
         {
-            return (Core.ResourceManager.Instance.LoadAsset<GameObject>( "Characters/Items/Pistol/Pistol") );
+            if (itemOnMap == eInventoryItem.Pistol)
+            {
+                return (Core.ResourceManager.Instance.LoadAsset<GameObject>("Characters/Items/Pistol/Pistol"));
+            }
+            Core.QLogger.Assert(false);
+            return null;
         }
-        Core.QLogger.Assert( false );
-        return null;
+
+        public static void MakeObjectHover(GameObject gameObject)
+        {
+            HoverAndRotate hr = gameObject.AddComponent<HoverAndRotate>();
+            hr.hoverRange = 0.2f;
+            hr.minHoverDistanceAboveGround = 0.2f;
+        }
+
+
+
     }
-
-    public static void MakeObjectHover ( GameObject gameObject )
-    {
-        HoverAndRotate hr =gameObject.AddComponent<HoverAndRotate>();
-        hr.hoverRange = 0.2f;
-        hr.minHoverDistanceAboveGround = 0.2f;
-    }
-
-
-
 }

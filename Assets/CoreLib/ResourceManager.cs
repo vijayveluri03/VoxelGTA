@@ -20,8 +20,8 @@ namespace Core
 			if (!isInitiated) Initialize();
 
 			UnityEngine.Object obj = resouceMap.GetObjectAtPath(path);
-			if (obj == null) QLogger.LogErrorAndThrowException("Object not found for " + path);
-			if ((obj as T) == null) QLogger.LogErrorAndThrowException("Object casting failed " + path);
+			if (obj == null) Core.QLogger.LogErrorAndThrowException("Object not found for " + path);
+			if ((obj as T) == null) Core.QLogger.LogErrorAndThrowException("Object casting failed " + path);
 
 			return obj as T;
 		}
@@ -29,13 +29,13 @@ namespace Core
 		public void LoadLevel(string sceneFilePath, bool additive, Action completeAction, bool async)
 		{
 			if (!isInitiated) Initialize();
-			if (QLogger.CanLogInfo) QLogger.LogInfo("Load scene " + sceneFilePath + " has begun");
+			if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has begun");
 			if (async)
 			{
 				AsyncOperation operation = SceneManager.LoadSceneAsync(sceneFilePath, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 				operation.completed += delegate (AsyncOperation o)
 				{
-					if (QLogger.CanLogInfo) QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
+					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
 					if (completeAction != null) completeAction();
 				};
 			}
@@ -44,7 +44,7 @@ namespace Core
 				SceneManager.LoadScene(sceneFilePath, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 				if (completeAction != null)
 				{
-					if (QLogger.CanLogInfo) QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
+					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
 					completeAction();
 				}
 			}
@@ -54,18 +54,18 @@ namespace Core
 		{
 			if (async)
 			{
-				if (QLogger.CanLogInfo) QLogger.LogInfo("Unload of scene " + sceneFilePath + " has begun");
+				if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Unload of scene " + sceneFilePath + " has begun");
 
 				AsyncOperation operation = SceneManager.UnloadSceneAsync(sceneFilePath);
 				operation.completed += delegate (AsyncOperation o)
 				{
-					if (QLogger.CanLogInfo) QLogger.LogInfo("Unload of scene " + sceneFilePath + " has completed");
+					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Unload of scene " + sceneFilePath + " has completed");
 					if (completeAction != null) completeAction();
 				};
 			}
 			else
 			{
-				QLogger.LogErrorAndThrowException("We only have async version for unload as direct one was made obselete by unity");
+				Core.QLogger.LogErrorAndThrowException("We only have async version for unload as direct one was made obselete by unity");
 			}
 		}
 

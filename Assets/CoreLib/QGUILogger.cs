@@ -23,7 +23,7 @@ namespace Core
 		}
 		public void SetLog ( int track, string log )
 		{
-			QLogger.Assert ( track >= 0 && track < maxTracks);
+			Core.QLogger.Assert ( track >= 0 && track < maxTracks);
 			this.log[track] = log;
 
 			strLog.Length = 0; 	//clearing

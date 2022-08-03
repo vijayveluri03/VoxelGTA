@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using Utils;
-using Core;
+
 
 //Editor class for ResourceMap
-namespace IO
+namespace Core
 {
 	[CustomPropertyDrawer(typeof(ResourceMap.Map))]
 	public class ResouceMapDrawer : PropertyDrawer
@@ -51,7 +51,7 @@ namespace IO
 				if (!pathObj.stringValue.StartsWith("Assets/Content/"))
 				{
 					serObj.objectReferenceValue = null;
-					QLogger.LogError("Only assets from /Assets/Content/ should be added");
+					Core.QLogger.LogError("Only assets from /Assets/Content/ should be added");
 				}
 
 					pathObj.stringValue = pathObj.stringValue.Substring("Assets/Content/".Length);  // removes Assets/Content/
