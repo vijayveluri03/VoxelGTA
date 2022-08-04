@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class ThirdPersonCamera : MonoBehaviour
+
+    public class ThirdPersonCamera : UnityEngine.MonoBehaviour
     {
-        [SerializeField] Transform characterToFollow;
-        [SerializeField] Vector3 offsetDistance;
+        [UnityEngine.SerializeField] Transform characterToFollow;
+        [UnityEngine.SerializeField] Vector3 offsetDistance;
 
         public float movementSpeed;
         public float rotationSpeed;
@@ -40,8 +41,8 @@ namespace GTA
 
 
 
-            transform.position = (Vector3.Slerp(transform.position, moveTo, movementSpeed * Time.fixedDeltaTime));
-            transform.rotation = Quaternion.Slerp(transform.rotation, slerpTo, rotationSpeed * Time.fixedDeltaTime);
+            transform.position = (Vector3.Slerp(transform.position, moveTo, movementSpeed * UnityEngine.Time.fixedDeltaTime));
+            transform.rotation = Quaternion.Slerp(transform.rotation, slerpTo, rotationSpeed * UnityEngine.Time.fixedDeltaTime);
         }
 
         Vector3 MultiplyVectors(Vector3 a, Vector3 b)

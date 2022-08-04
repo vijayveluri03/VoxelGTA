@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using System.IO;
 using System.Linq;
-
+using UnityEngine;
 
 namespace Core
 {
@@ -27,7 +27,7 @@ namespace Core
 				{
 					if (map.overridePath)
 					{
-                        //Debug.LogWarning(Application.dataPath + "/Content/" + map.path);
+                        //Core.QLogger.LogWarning(Application.dataPath + "/Content/" + map.path);
                         List<ResourceMap.Map> maps = GetAllAssetsAt ( map.path);
 						if (maps != null && maps.Count > 0 )
 						{

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace GTA
 {
     public class CharacterCommonState
@@ -37,7 +38,7 @@ namespace GTA
             if (reAdjustYBy != 0)
             {
                 position = MoveBy(position, new Vector3(0, reAdjustYBy, 0));
-                Debug.Log("Readjustment : " + reAdjustYBy);
+                Core.QLogger.LogInfo("Readjustment : " + reAdjustYBy);
             }
             return position;
         }
@@ -79,11 +80,11 @@ namespace GTA
         {
             // Hardcoded for now 
             float mouseInputX = Input.GetAxis("Mouse X") * inputs.mouseIntensity;
-            //Debug.Log("Mouse input" + mouseInputX);
+            //Core.QLogger.LogInfo("Mouse input" + mouseInputX);
             Quaternion a = Quaternion.AngleAxis(mouseInputX * 360 * Time.fixedDeltaTime, Vector3.up);
 
             float mouseInputY = Input.GetAxis("Mouse Y") * inputs.mouseIntensity;
-            //Debug.Log("Mouse input" + mouseInputY);
+            //Core.QLogger.LogInfo("Mouse input" + mouseInputY);
             Quaternion b = Quaternion.AngleAxis(mouseInputY * 360 * Time.fixedDeltaTime, Vector3.right);
             /// todo : temp.!-- impliment y axis as well 
             b = Quaternion.identity;

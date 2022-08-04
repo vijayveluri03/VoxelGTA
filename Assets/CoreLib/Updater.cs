@@ -1,7 +1,9 @@
-using UnityEngine;
+
 using System;
 using System.Collections;
 using System.Linq;
+using UnityEngine;
+
 
 namespace Core
 {
@@ -46,7 +48,7 @@ namespace Core
         {
             if (action == null)
             {
-                Debug.LogWarning("RunNextFrame called with null action!");
+                Core.QLogger.LogWarning("RunNextFrame called with null action!");
                 return;
             }
 
@@ -57,7 +59,7 @@ namespace Core
         {
             if (action == null)
             {
-                Debug.LogWarning("WaitAndRun called with null action!");
+                Core.QLogger.LogWarning("WaitAndRun called with null action!");
                 return;
             }
 
@@ -68,13 +70,13 @@ namespace Core
         {
             if (operation == null)
             {
-                Debug.LogWarning("WaitOnAsyncOperation called with null operation!");
+                Core.QLogger.LogWarning("WaitOnAsyncOperation called with null operation!");
                 return;
             }
 
             if (onComplete == null)
             {
-                Debug.LogWarning("WaitOnAsyncOperation called with null onComplete!");
+                Core.QLogger.LogWarning("WaitOnAsyncOperation called with null onComplete!");
                 return;
             }
 

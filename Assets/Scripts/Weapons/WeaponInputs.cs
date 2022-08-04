@@ -50,7 +50,7 @@ namespace GTA
 
         // private bool isGrounded = false;
         // private int jumpCountFromGround = 0;
-        // private float VerticalForce  { get { return verticalForce;} set { verticalForce = value; Debug.Log("VerticalForce " + verticalForce); }}
+        // private float VerticalForce  { get { return verticalForce;} set { verticalForce = value; Core.QLogger.LogInfo("VerticalForce " + verticalForce); }}
         // private float verticalForce = 0;
 
         // private RaycastHit hitInfo = new RaycastHit();
@@ -150,7 +150,7 @@ namespace GTA
         //     if ( reAdjustYBy != 0 )
         //     {
         //        MoveBy ( new Vector3 ( 0, reAdjustYBy, 0 ));
-        //        Debug.Log("Readjustment : " + reAdjustYBy);
+        //        Core.QLogger.LogInfo("Readjustment : " + reAdjustYBy);
         //     }
 
         //     transform.position =  PositionPseudo;// Vector3.Lerp ( transform.position, PositionPseudo, 0.75f  );
@@ -203,10 +203,10 @@ namespace GTA
         // private eAnimationStates previousState = 0;
         // // void OnCollisionEnter(Collision collision)
         // // {
-        // //     Debug.Log( "Collided:" + collision.gameObject.layer );
+        // //     Core.QLogger.LogInfo( "Collided:" + collision.gameObject.layer );
         // //     if ( collision != null && collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         // //     {
-        // //         Debug.Log("Grounded");
+        // //         Core.QLogger.LogInfo("Grounded");
         // //         isGrounded = true;
         // //         jumpCountFromGround = 0;
         // //         VerticalForce = 0;

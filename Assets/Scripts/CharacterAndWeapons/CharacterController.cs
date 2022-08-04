@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace GTA
 {
+
     public class CharacterController
     {
         public enum eStates

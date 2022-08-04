@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+
 using Utils;
 
 
@@ -39,7 +40,7 @@ namespace Core
 			EditorGUIUtility.labelWidth = 14f;
 
 			SerializedProperty pathObj = property.FindPropertyRelative("path");
-			//Debug.Log("Path:" + pathObj.stringValue);
+			//Core.QLogger.LogInfo("Path:" + pathObj.stringValue);
 
 			SerializedProperty boolObj = property.FindPropertyRelative("overridePath");
 			bool overridePathGeneration = boolObj.boolValue;

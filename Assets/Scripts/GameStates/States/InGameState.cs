@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 namespace GTA
@@ -21,6 +20,10 @@ namespace GTA
         public override void OnContext(System.Object context)
         {
             base.OnContext(context);
+            Core.QLogger.Assert(context != null && context is Core.SharedObjects<System.Object>);
+            sharedObjects = context as Core.SharedObjects<System.Object>;
+
+            // todo - why are we initializing everything in oncontext. seperate them into other methods
 
             collisionProcessor = new CollisionProcessor();
 
@@ -42,6 +45,8 @@ namespace GTA
             cameraMonoScript.SetCharacterToFollow(charaterModelGO.transform);   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
 
             player.EquipWeapon(eInventoryItem.Pistol);
+
+            sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem).SwitchCamera(eCameraType.PLAYER_CAMERA);
 
             Core.Updater.Instance.FixedUpdater += FixedUpdate;
             Core.Updater.Instance.LateUpdater += LateUpdate;
@@ -82,5 +87,6 @@ namespace GTA
         iPlayer player = null;
         ThirdPersonCamera cameraMonoScript = null;
         CollisionProcessor collisionProcessor = null;
+        private Core.SharedObjects<System.Object> sharedObjects = null;
     }
 }

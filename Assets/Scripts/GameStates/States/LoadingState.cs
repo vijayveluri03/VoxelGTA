@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 namespace GTA
 {
     public class LoadingState : Core.FSMBaseState<GStateManager.eState>
@@ -14,16 +15,76 @@ namespace GTA
             if (sharedObjects == null)
                 return;
 
-            if (sharedObjects.TryFetch( Constants.SOKeys.UIManager) == null)
+            switch (step)
             {
-                CreateUIManager();
-                return;
-            }
 
-            if ( !isLevelBeingLoaded )
-            {
-                isLevelBeingLoaded = true;
-                LoadLobbyAndGoToNextState();
+                case 0:
+                    {
+                        if (sharedObjects.TryFetch(Constants.SOKeys.UIManager) == null)
+                        {
+                            CreateUIManager();
+                            return;
+                        }
+                        step++;
+                    }
+                    break;
+                case 1:
+                    {
+                        if (sharedObjects.TryFetch(Constants.SOKeys.CameraSystem) == null)
+                        {
+                            sharedObjects.Add(Constants.SOKeys.CameraSystem, new Core.CameraSystem<eCameraType>());
+                            return;
+                        }
+                        step++;
+                    }
+                    break;
+                case 2:
+                    {
+                        var sceneInput = RegisterInputs.GetInputsFromScene();
+                        sceneInput.RegisterCameraInputs(sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem));
+                        sceneInput.Destroy(true);
+
+                        sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem).SwitchCamera(eCameraType.MAIN_CAMERA);
+
+                        step++;
+                    }
+                    break;
+                case 3:
+                    {
+                        LoadLobbyAndGoToNextState();
+                        step++;
+                        break;
+                    }
+                case 4:
+
+                    if ( isLevelLoaded )
+                    {
+                        step++;
+                    }
+                    break;
+                case 5:
+                    {
+                        var sceneInput = RegisterInputs.GetInputsFromScene();
+                        sceneInput.RegisterCameraInputs(sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem));
+                        sceneInput.Destroy(true);
+                        step++;
+                        break;
+                    }
+
+                case 6:
+                    {
+#if DEBUG
+                        statemachine.PushNextState(GStateManager.eState.Game, sharedObjects);
+#else
+                        statemachine.PushNextState(GStateManager.eState.Frontend, sharedObjects);
+#endif
+                        step++;
+                        break;
+                    }
+                case 7:
+                    Core.QLogger.Assert(false);
+                    break;
+
             }
         }
 
@@ -54,17 +115,14 @@ namespace GTA
             Core.ResourceManager.Instance.LoadLevel("Lobby", true,
                 delegate ()
                 {
-#if DEBUG
-                    statemachine.PushNextState(GStateManager.eState.Game, null);
-#else
-                    statemachine.PushNextState(GStateManager.eState.Frontend, null);
-#endif
+                    isLevelLoaded = true;
                 }, true
                 );
         }
 
         private Core.SharedObjects<System.Object> sharedObjects = null;
-        private bool isLevelBeingLoaded = false;
+        private bool isLevelLoaded = false;
+        private int step = 0;
         
     }
 }

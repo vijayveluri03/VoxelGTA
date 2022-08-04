@@ -1,10 +1,11 @@
+using UnityEngine;
+using System.Collections;
+using System.Reflection;
+using System;
+
 
 namespace Core
 {
-    using UnityEngine;
-    using System.Collections;
-    using System.Reflection;
-    using System;
 
     public class Singleton<T> where T : class, new()
     {

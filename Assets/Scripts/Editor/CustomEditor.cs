@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿
 using UnityEditor;
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using UnityEngine;
 
-    public class CustomGUI : Editor
+
+public class CustomGUI : Editor
     {
         static List<string> HeaderList = new List<string>();
 

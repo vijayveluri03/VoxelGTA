@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace GTA
 {
+
     public class WeaponCommonState
     {
         public WeaponCommonState(WeaponController owner)
@@ -33,7 +33,7 @@ namespace GTA
         }
 
         private WeaponController.eStates previousState = 0;
-        public Animator animator { get { return owner.Animator; } }
+        public UnityEngine.Animator animator { get { return owner.Animator; } }
 
         #endregion
 
@@ -111,7 +111,7 @@ namespace GTA
         {
             base.OnEnter(arguments);
             CommonState.SetAnimation(WeaponController.eStates.Idle);
-            Debug.LogWarning("WeaponIdle");
+            Core.QLogger.LogWarning("WeaponIdle");
         }
 
         public override void Update()
@@ -143,7 +143,7 @@ namespace GTA
         {
             base.OnEnter(arguments);
             CommonState.SetAnimation(WeaponController.eStates.Shoot);
-            Debug.LogWarning("WeaponIdleWalk");
+            Core.QLogger.LogWarning("WeaponIdleWalk");
 
             // Fire one bullet and go to recoil
             CommonState.FireBullet(1 /* accuracy */);
@@ -201,7 +201,7 @@ namespace GTA
         {
             base.OnEnter(arguments);
             CommonState.SetAnimation(WeaponController.eStates.Recoil);
-            Debug.LogWarning("WeaponRecoil");
+            Core.QLogger.LogWarning("WeaponRecoil");
             recoilTime = 0;
         }
 

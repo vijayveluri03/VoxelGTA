@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace Core
 {
     public class UIPanel : MonoBehaviour

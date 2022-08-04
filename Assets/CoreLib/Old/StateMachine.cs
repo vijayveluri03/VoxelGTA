@@ -1,4 +1,4 @@
-using UnityEngine;
+
 using System.Collections;
 
 namespace Core.old 
@@ -53,7 +53,7 @@ namespace Core.old
 		{
 			// if( s_logAllStateChanges )
 			// {
-			//     Debug.Log( "StateChange: "+typeof(OwnerType)+"  prev:"+m_currentID+"  new:"+newStateID );
+			//     Core.QLogger.LogInfo( "StateChange: "+typeof(OwnerType)+"  prev:"+m_currentID+"  new:"+newStateID );
 			//     L.LogCallStack( true );
 			// }
 
@@ -126,7 +126,7 @@ namespace Core.old
 		{
 			if( !type.IsSubclassOf( typeof(State) ) )	
 			{
-				Debug.LogError( "RegisterState only accepts State types!");
+				Core.QLogger.LogError( "RegisterState only accepts State types!");
 			}
 			m_stateTypes[ ID ] = type;
 		}

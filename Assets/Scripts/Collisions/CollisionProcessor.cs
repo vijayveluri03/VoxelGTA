@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+
 
 namespace GTA
 {
@@ -13,7 +13,7 @@ namespace GTA
     }
     public void ProcessCollision ( iInteractable a, iInteractable b )
     {
-        Debug.LogError("I have received an event to process collisions");
+        Core.QLogger.LogError("I have received an event to process collisions");
         Core.QLogger.Assert ( a != null && b != null );
 
         if ( a.IsThisPlayer )
@@ -21,7 +21,7 @@ namespace GTA
             Core.QLogger.Assert ( a.listener != null && a.listener is iPlayer );
 
             iPlayer player = a.listener as iPlayer;
-            Debug.LogWarning("Receieved a collision event from " + b.GetName());
+            Core.QLogger.LogWarning("Receieved a collision event from " + b.GetName());
             if ( b is ItemOnMap )
             {
                 ItemOnMap itemOnMap = b as ItemOnMap;
@@ -30,7 +30,7 @@ namespace GTA
                     player.WeaponInventory.Collect ( itemOnMap.itemOnMapType, itemOnMap.count );
                     itemOnMap.OnItemCollected();
                     
-                    Debug.LogWarning("Item collected : " + b.GetName());
+                    Core.QLogger.LogWarning("Item collected : " + b.GetName());
                  }
             }
         }

@@ -1,6 +1,6 @@
 ﻿// using System.Collections;
 // using System.Collections.Generic;
-// using UnityEngine;
+// 
 
 // public class Character : MonoBehaviour
 // {
@@ -16,7 +16,7 @@
 //     private Quaternion slerpTo;
 //     private bool grounded = false;
 //     private int jumpCount = 0;
-//     private float VerticalForce  { get { return verticalForce;} set { verticalForce = value; Debug.Log("VerticalForce " + verticalForce); }}
+//     private float VerticalForce  { get { return verticalForce;} set { verticalForce = value; Core.QLogger.LogInfo("VerticalForce " + verticalForce); }}
 //     private float verticalForce = 0;
 //     private RaycastHit hitInfo = new RaycastHit();
 //     private int groundLayerMask;
@@ -110,10 +110,10 @@
 
 //     void OnCollisionEnter(Collision collision)
 //     {
-//         Debug.Log( "Collided:" + collision.gameObject.layer );
+//         Core.QLogger.LogInfo( "Collided:" + collision.gameObject.layer );
 //         if ( collision != null && collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
 //         {
-//             Debug.Log("Grounded");
+//             Core.QLogger.LogInfo("Grounded");
 //             grounded = true;
 //             jumpCount = 0;
 //             VerticalForce = 0;
