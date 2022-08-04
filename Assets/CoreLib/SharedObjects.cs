@@ -46,6 +46,13 @@ namespace Core
             return objects[name];
         }
 
+        public U Fetch<U>(string name) where U : class
+        {
+            Core.QLogger.Assert(objects.ContainsKey(name));
+            return objects[name] as U;
+        }
+
+
         private Dictionary<string, T> objects = new Dictionary<string, T>();
     }
 }
