@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Core.FSMController;
 
 namespace GTA
 {
@@ -19,16 +18,21 @@ namespace GTA
         public GameObject GameObject { get; private set; }
         public Animator Animator { get; private set; }
         public WeaponInputs Inputs { get; private set; }
-        public WeaponCommon Common { get; private set; }
+        public WeaponCommonState CommonState { get; private set; }
+
+        public WeaponController()
+        {
+
+        }
 
         public void EquipWeapon(GameObject WeaponObject)
         {
             GameObject = WeaponObject;
             Animator = GameObject.GetComponent<Animator>();
             Inputs = GameObject.GetComponent<WeaponInputs>();
-            Common = new WeaponCommon(this);
+            CommonState = new WeaponCommonState(this);
 
-            controller = new FSMController<WeaponController, eStates>(this);
+            controller = new Core.FSMController<WeaponController, eStates>(this);
             controller.RegisterState(eStates.Idle, new WeaponIdle());
             controller.RegisterState(eStates.Shoot, new WeaponShoot());
             controller.RegisterState(eStates.Reload, new WeaponReload());
@@ -42,7 +46,7 @@ namespace GTA
             controller.SetLogToGUI(true, 2);
 
             controller.SetState(eStates.Idle);
-            Common.Init();
+            CommonState.Init();
 
             // sanity checks
             Core.QLogger.Assert(Inputs.magCapacity > 0);
@@ -70,7 +74,7 @@ namespace GTA
                 controller.Notify(arguments);
         }
 
-        private FSMController<WeaponController, eStates> controller = null;
+        private Core.FSMController<WeaponController, eStates> controller = null;
 
     }
 }

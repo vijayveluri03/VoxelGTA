@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Core.FSMController;
 
 
 namespace GTA
 {
-    public class WeaponCommon
+    public class WeaponCommonState
     {
-        public WeaponCommon(WeaponController owner)
+        public WeaponCommonState(WeaponController owner)
         {
             this.owner = owner;
         }
@@ -80,12 +79,12 @@ namespace GTA
         public WeaponInputs inputs { get { return owner.Inputs; } }
     }
 
-    public class WeaponCore : FSMController<WeaponController, WeaponController.eStates>.FSMState
+    public class WeaponCore : Core.FSMCState<WeaponController, WeaponController.eStates>
     {
         public Transform transform { get { return Owner.GameObject.transform; } }
         public GameObject gameObject { get { return Owner.GameObject; } }
         public WeaponInputs inputs { get { return Owner.Inputs; } }
-        public WeaponCommon common { get { return Owner.Common; } }
+        public WeaponCommonState CommonState { get { return Owner.CommonState; } }
         public Animator animator { get { return Owner.Animator; } }
     }
 
@@ -111,7 +110,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            common.SetAnimation(WeaponController.eStates.Idle);
+            CommonState.SetAnimation(WeaponController.eStates.Idle);
             Debug.LogWarning("WeaponIdle");
         }
 
@@ -127,7 +126,7 @@ namespace GTA
             //temp hardcode
             if (Input.GetKeyDown(KeyCode.R))
             {
-                if (!common.IsMagazineFull())
+                if (!CommonState.IsMagazineFull())
                     SetState(WeaponController.eStates.Reload);
             }
 
@@ -143,11 +142,11 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            common.SetAnimation(WeaponController.eStates.Shoot);
+            CommonState.SetAnimation(WeaponController.eStates.Shoot);
             Debug.LogWarning("WeaponIdleWalk");
 
             // Fire one bullet and go to recoil
-            common.FireBullet(1 /* accuracy */);
+            CommonState.FireBullet(1 /* accuracy */);
             SetState(WeaponController.eStates.Recoil);
         }
 
@@ -171,7 +170,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            common.SetAnimation(WeaponController.eStates.Reload);
+            CommonState.SetAnimation(WeaponController.eStates.Reload);
             time = 0;
         }
 
@@ -181,7 +180,7 @@ namespace GTA
             time += Time.deltaTime;
             if (time >= inputs.reloadTime)
             {
-                if (Input.GetMouseButton(0) && common.CanAutoShootNextBullet() && !common.IsMagazineEmpty())
+                if (Input.GetMouseButton(0) && CommonState.CanAutoShootNextBullet() && !CommonState.IsMagazineEmpty())
                     SetState(WeaponController.eStates.Shoot);
                 else
                     SetState(WeaponController.eStates.Idle);
@@ -201,7 +200,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            common.SetAnimation(WeaponController.eStates.Recoil);
+            CommonState.SetAnimation(WeaponController.eStates.Recoil);
             Debug.LogWarning("WeaponRecoil");
             recoilTime = 0;
         }
@@ -213,9 +212,9 @@ namespace GTA
             if (recoilTime >= inputs.recoilTime)
             {
                 //todo hardcode 
-                if (Input.GetMouseButton(0) && common.CanAutoShootNextBullet() && !common.IsMagazineEmpty())
+                if (Input.GetMouseButton(0) && CommonState.CanAutoShootNextBullet() && !CommonState.IsMagazineEmpty())
                     SetState(WeaponController.eStates.Shoot);
-                else if (common.IsMagazineEmpty())
+                else if (CommonState.IsMagazineEmpty())
                     SetState(WeaponController.eStates.Reload);
                 else
                     SetState(WeaponController.eStates.Idle);

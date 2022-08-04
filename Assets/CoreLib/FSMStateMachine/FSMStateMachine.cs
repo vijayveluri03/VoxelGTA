@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+// This is a Basic FSM state. If you want something a bit more advanced, try FSMController
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

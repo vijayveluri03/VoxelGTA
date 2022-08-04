@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Core 
+namespace Core.old 
 {
 	public class StateMachine<OwnerType>
 	{

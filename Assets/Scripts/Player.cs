@@ -4,12 +4,6 @@ using UnityEngine;
 
 namespace GTA
 {
-
-    public class Player : iPlayer
-    {
-
-
-    }
     public class iPlayer : iListener
     {
         public WeaponController weaponController { get; private set; }
@@ -56,6 +50,7 @@ namespace GTA
         {
             return false;
         }
+
         public void EquipWeapon(eInventoryItem item)
         {
             GameObject gun = ItemFactory.Spawn(item);
@@ -72,6 +67,12 @@ namespace GTA
 
     public class iListener
     {
+
+    }
+
+    public class Player : iPlayer
+    {
+
 
     }
 }

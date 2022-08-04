@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Core.FSMController;
 
 namespace GTA
 {
@@ -15,20 +14,18 @@ namespace GTA
             Falling
         }
         public GameObject GameObject { get; private set; }
-        public iPlayer player { get; private set; }
         public Animator Animator { get; private set; }
         public CharacterInputs Inputs { get; private set; }
-        public CharacterCommon Common { get; private set; }
+        public CharacterCommonState CommonState { get; private set; }
 
-        public void Init(GameObject characterObject, iPlayer player)
+        public void Init(GameObject characterObject)
         {
             GameObject = characterObject;
-            this.player = player;
             Animator = GameObject.GetComponent<Animator>();
             Inputs = GameObject.GetComponent<CharacterInputs>();
-            Common = new CharacterCommon(this);
+            CommonState = new CharacterCommonState(this);
 
-            controller = new FSMController<CharacterController, eStates>(this);
+            controller = new Core.FSMController<CharacterController, eStates>(this);
             controller.RegisterState(eStates.Idle, new CharacterIdle());
             controller.RegisterState(eStates.Walk, new CharacterIdleWalk());
             controller.RegisterState(eStates.Jump, new CharacterJump());
@@ -67,7 +64,7 @@ namespace GTA
                 controller.Notify(arguments);
         }
 
-        private FSMController<CharacterController, eStates> controller = null;
+        private Core.FSMController<CharacterController, eStates> controller = null;
 
     }
 }

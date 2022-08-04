@@ -63,15 +63,17 @@
     <Compile Include="Assets\Scripts\Character\ThirdPersonCamera.cs" />
     <Compile Include="Assets\CoreLib\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
+    <Compile Include="Assets\Scripts\Constants.cs" />
     <Compile Include="Assets\CoreLib\QLogger.cs" />
     <Compile Include="Assets\Scripts\iInteractable.cs" />
     <Compile Include="Assets\Scripts\UI\UiHomeScreen.cs" />
     <Compile Include="Assets\Scripts\Weapons\Bullet.cs" />
+    <Compile Include="Assets\CoreLib\SharedObjects.cs" />
     <Compile Include="Assets\Scripts\Weapons\WeaponController.cs" />
     <Compile Include="Assets\Scripts\Application.cs" />
     <Compile Include="Assets\CoreLib\Updater.cs" />
     <Compile Include="Assets\Scripts\GameStates\States\LoadingState.cs" />
-    <Compile Include="Assets\CoreLib\StateMachine.cs" />
+    <Compile Include="Assets\CoreLib\Old\StateMachine.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterInputs.cs" />
     <Compile Include="Assets\CoreLib\UI\UIManager.cs" />
     <Compile Include="Assets\CoreLib\Singleton.cs" />
@@ -87,11 +89,9 @@
     <Compile Include="Assets\CoreLib\Utils\Extensions.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterBaseState.cs" />
     <Compile Include="Assets\Scripts\GameStates\States\InGameState.cs" />
-    <Compile Include="Assets\CoreLib\FSMController\FSMController.cs" />
+    <Compile Include="Assets\CoreLib\FSMStateMachine\FSMController.cs" />
     <Compile Include="Assets\Scripts\WeaponStates.cs" />
     <Compile Include="Assets\Scripts\ItemOnMap.cs" />
-    <Compile Include="Assets\CoreLib\SharedObjects.cs" />
-    <Compile Include="Assets\Scripts\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ExternalPackages\FreeVoxelGirl\ReadMe.txt" />

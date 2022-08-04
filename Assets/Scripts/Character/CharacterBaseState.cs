@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Core.FSMController;
 
 namespace GTA
 {
-    public class CharacterCommon
+    public class CharacterCommonState
     {
-        public CharacterCommon(CharacterController owner)
+        public CharacterCommonState(CharacterController owner)
         {
             this.owner = owner;
         }
@@ -149,16 +148,16 @@ namespace GTA
         public CharacterInputs inputs { get { return owner.Inputs; } }
     }
 
-    public class CharacterCore : FSMController<CharacterController, CharacterController.eStates>.FSMState
+    public class FSMCStateWithCharacterSharedContext : Core.FSMCState<CharacterController, CharacterController.eStates>
     {
-        public Transform transform { get { return Owner.GameObject.transform; } }
-        public GameObject gameObject { get { return Owner.GameObject; } }
-        public CharacterInputs inputs { get { return Owner.Inputs; } }
-        public CharacterCommon common { get { return Owner.Common; } }
-        public Animator animator { get { return Owner.Animator; } }
+        public Transform Transform { get { return Owner.GameObject.transform; } }
+        public GameObject GameObject { get { return Owner.GameObject; } }
+        public CharacterInputs Inputs { get { return Owner.Inputs; } }
+        public CharacterCommonState CommonState { get { return Owner.CommonState; } }
+        public Animator Animator { get { return Owner.Animator; } }
     }
 
-    public class CharacterBaseState : CharacterCore
+    public class CharacterBaseState : FSMCStateWithCharacterSharedContext
     {
 
         //private Rigidbody rb;
@@ -176,7 +175,7 @@ namespace GTA
         {
             base.OnEnter(arguments);
 
-            Core.QLogger.Assert(inputs.acceptableDistanceToBottom > inputs.exactDistanceToBottom && inputs.exactDistanceToBottom > 0);
+            Core.QLogger.Assert(Inputs.acceptableDistanceToBottom > Inputs.exactDistanceToBottom && Inputs.exactDistanceToBottom > 0);
         }
 
         // Update is called once per frame
@@ -193,14 +192,14 @@ namespace GTA
 
         protected void CachePosition()
         {
-            PositionPseudo = transform.position;
-            RotationPseudo = transform.rotation;
+            PositionPseudo = Transform.position;
+            RotationPseudo = Transform.rotation;
 
         }
         protected void ApplyPosition()
         {
-            transform.position = PositionPseudo;
-            transform.rotation = RotationPseudo;
+            Transform.position = PositionPseudo;
+            Transform.rotation = RotationPseudo;
         }
     }
 
@@ -215,10 +214,10 @@ namespace GTA
         {
             base.FixedUpdate();
             CachePosition();
-            common.DoGroundedCheck();
-            common.ProcessMouseMovement_WithFixedUpdate();
+            CommonState.DoGroundedCheck();
+            CommonState.ProcessMouseMovement_WithFixedUpdate();
 
-            if (!common.isGrounded)
+            if (!CommonState.isGrounded)
             {
                 SetState(CharacterController.eStates.Falling);
                 return;
@@ -228,14 +227,14 @@ namespace GTA
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
 
-            if (v != 0 || h != 0 || !common.AreVelocitiesZero())
+            if (v != 0 || h != 0 || !CommonState.AreVelocitiesZero())
             {
                 SetState(CharacterController.eStates.Walk, v, h);
                 return;
             }
 
-            PositionPseudo = common.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = common.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
+            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
             ApplyPosition();
 
 
@@ -271,10 +270,10 @@ namespace GTA
 
             CachePosition();
 
-            common.DoGroundedCheck();
-            common.ProcessMouseMovement_WithFixedUpdate();
+            CommonState.DoGroundedCheck();
+            CommonState.ProcessMouseMovement_WithFixedUpdate();
 
-            if (!common.isGrounded)
+            if (!CommonState.isGrounded)
             {
                 SetState(CharacterController.eStates.Falling);
                 return;
@@ -291,8 +290,8 @@ namespace GTA
 
             Move_WithFixedUpdate(sideIntensity, forwardIntensity);
 
-            PositionPseudo = common.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = common.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
+            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
 
             ApplyPosition();// Vector3.Lerp ( transform.position, PositionPseudo, 0.75f  );
 
@@ -302,32 +301,32 @@ namespace GTA
 
         public void Move_WithFixedUpdate(float forwardIntensity, float sideIntensity)
         {
-            common.horizontalVelocity = Vector3.zero;
+            CommonState.horizontalVelocity = Vector3.zero;
 
             if (forwardIntensity != 0)
             {
-                this.forwardRaw += inputs.acceleration * Time.fixedDeltaTime * Mathf.Sign(forwardIntensity);
-                this.forwardRaw = Mathf.Min(this.forwardRaw, inputs.movementSpeedMax);
+                this.forwardRaw += Inputs.acceleration * Time.fixedDeltaTime * Mathf.Sign(forwardIntensity);
+                this.forwardRaw = Mathf.Min(this.forwardRaw, Inputs.movementSpeedMax);
             }
 
-            if (inputs.dragHorizontal != 0)
+            if (Inputs.dragHorizontal != 0)
             {
-                this.forwardRaw /= 1 + inputs.dragHorizontal * Time.fixedDeltaTime;
+                this.forwardRaw /= 1 + Inputs.dragHorizontal * Time.fixedDeltaTime;
             }
 
             if (sideIntensity != 0)
             {
-                this.strafeRaw += inputs.strafeAcceleration * Time.fixedDeltaTime * Mathf.Sign(sideIntensity);
-                this.strafeRaw = Mathf.Min(this.strafeRaw, inputs.strafeSpeedMax);
+                this.strafeRaw += Inputs.strafeAcceleration * Time.fixedDeltaTime * Mathf.Sign(sideIntensity);
+                this.strafeRaw = Mathf.Min(this.strafeRaw, Inputs.strafeSpeedMax);
             }
 
-            if (inputs.strafeDragHorizontal != 0)
+            if (Inputs.strafeDragHorizontal != 0)
             {
-                this.strafeRaw /= 1 + inputs.strafeDragHorizontal * Time.fixedDeltaTime;
+                this.strafeRaw /= 1 + Inputs.strafeDragHorizontal * Time.fixedDeltaTime;
             }
 
 
-            common.horizontalVelocity = (transform.forward * this.forwardRaw) + (transform.right * this.strafeRaw);
+            CommonState.horizontalVelocity = (Transform.forward * this.forwardRaw) + (Transform.right * this.strafeRaw);
 
             if (sideIntensity != 0)
             {
@@ -356,8 +355,8 @@ namespace GTA
 
             jumpCountFromGround = 0;
 
-            common.SetAnimation(eAnimationStates.Jump);
-            common.verticalVelocity += JumpIfPossibleAndReturnDetaForce(inputs.jumpForceValue); ;
+            CommonState.SetAnimation(eAnimationStates.Jump);
+            CommonState.verticalVelocity += JumpIfPossibleAndReturnDetaForce(Inputs.jumpForceValue); ;
         }
 
         public override void FixedUpdate()
@@ -366,11 +365,11 @@ namespace GTA
 
             CachePosition();
 
-            common.DoGroundedCheck();
+            CommonState.DoGroundedCheck();
 
-            if (common.isGrounded)
+            if (CommonState.isGrounded)
             {
-                if (common.AreVelocitiesZero())
+                if (CommonState.AreVelocitiesZero())
                     SetState(CharacterController.eStates.Idle);
                 else
                     SetState(CharacterController.eStates.Walk);
@@ -378,15 +377,15 @@ namespace GTA
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                common.verticalVelocity += JumpIfPossibleAndReturnDetaForce(inputs.jumpForceValue); ;
-                common.SetAnimation(eAnimationStates.Jump);
+                CommonState.verticalVelocity += JumpIfPossibleAndReturnDetaForce(Inputs.jumpForceValue); ;
+                CommonState.SetAnimation(eAnimationStates.Jump);
             }
 
-            if (common.IsFalling())
+            if (CommonState.IsFalling())
                 SetState(CharacterController.eStates.Falling);
 
-            PositionPseudo = common.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = common.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
+            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
 
             ApplyPosition();// Vector3.Lerp ( transform.position, PositionPseudo, 0.75f  );
         }
@@ -422,18 +421,18 @@ namespace GTA
 
             CachePosition();
 
-            common.DoGroundedCheck();
+            CommonState.DoGroundedCheck();
 
-            if (common.isGrounded)
+            if (CommonState.isGrounded)
             {
-                if (common.AreVelocitiesZero())
+                if (CommonState.AreVelocitiesZero())
                     SetState(CharacterController.eStates.Idle);
                 else
                     SetState(CharacterController.eStates.Walk);
             }
 
-            PositionPseudo = common.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = common.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
+            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
 
             ApplyPosition();// Vector3.Lerp ( transform.position, PositionPseudo, 0.75f  );
 

@@ -24,26 +24,22 @@ namespace GTA
 
             collisionProcessor = new CollisionProcessor();
 
-            GameObject voxelCharacter = GameObject.Instantiate(Core.ResourceManager.Instance.LoadAsset<UnityEngine.Object>("Characters/VoxelGirl/MainCharacter")) as GameObject;
-            if (voxelCharacter == null) Core.QLogger.LogErrorAndThrowException("VoxelGirl is not instantiated");
+            GameObject charaterModelGO = GameObject.Instantiate(Core.ResourceManager.Instance.LoadAsset<UnityEngine.Object>("Characters/VoxelGirl/MainCharacter")) as GameObject;
+            if (charaterModelGO == null) Core.QLogger.LogErrorAndThrowException("VoxelGirl is not instantiated");
 
-            // Main.Instance.uIManager = uiManagerGo.GetComponent<UIManager>();
-            // if ( Main.Instance.uIManager == null ) Core.QLogger.LogErrorAndThrowException ( "UiManager script was not instantiated");
-
-            player = new iPlayer();
             CharacterController controller = new CharacterController();
-            controller.Init(voxelCharacter, player);
+            controller.Init(charaterModelGO);
             WeaponController weaponController = new WeaponController();
+
+            player = new Player();
             player.Init(controller, weaponController);
 
-            CollisionListener playerCollisionListener = voxelCharacter.GetComponentInChildren<CollisionListener>();
+            CollisionListener playerCollisionListener = charaterModelGO.GetComponentInChildren<CollisionListener>();
             Core.QLogger.Assert(playerCollisionListener != null);
             playerCollisionListener.Init(collisionProcessor.ProcessCollision, player);
 
-
-            cameraScript = GameObject.Find("ThirdPersonCamera").GetComponent<ThirdPersonCamera>();
-            cameraScript.SetCharacterToFollow(voxelCharacter.transform);
-
+            cameraMonoScript = GameObject.Find("ThirdPersonCamera").GetComponent<ThirdPersonCamera>();
+            cameraMonoScript.SetCharacterToFollow(charaterModelGO.transform);   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
 
             player.EquipWeapon(eInventoryItem.Pistol);
 
@@ -84,7 +80,7 @@ namespace GTA
         }
 
         iPlayer player = null;
-        ThirdPersonCamera cameraScript = null;
+        ThirdPersonCamera cameraMonoScript = null;
         CollisionProcessor collisionProcessor = null;
     }
 }
