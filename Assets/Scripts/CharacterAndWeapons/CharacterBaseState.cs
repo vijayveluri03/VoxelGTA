@@ -142,7 +142,6 @@ namespace GTA
 
             public void SetAnimation(eAnimationStates state)
             {
-                return; // not all animations are present at this moment 
                 if (previousState != state)
                     animator.SetInteger("AnimationState", (int)state);
 
@@ -229,13 +228,6 @@ namespace GTA
 
     public class CharacterBaseState : FSMCStateWithCharacterSharedContext
     {
-
-
-        private AnimationClip runAnimationClip = null;
-        private string previousPlayedAnimationName = "";
-
-        // private int groundLayerMask;
-
         // Start is called before the first frame update
         public override void OnEnter(params object[] arguments)
         {
@@ -274,6 +266,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
+            CommonBehaviour.animation.SetAnimation(eAnimationStates.Idle);
             CommonBehaviour.movement.SetHorizontalVelocity(Vector3.zero);
         }
 
@@ -321,7 +314,8 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            
+            CommonBehaviour.animation.SetAnimation(eAnimationStates.Run);
+
             if (arguments != null && arguments.Length == 2)
             {
                 // Move this based on previous values in previous frame 
@@ -411,8 +405,6 @@ namespace GTA
         {
             base.Notify(arguments);
         }
-
-        
     }
 
     public class CharacterJump : CharacterBaseState
@@ -491,6 +483,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
+            CommonBehaviour.animation.SetAnimation(eAnimationStates.Falling);
         }
 
         public override void FixedUpdate()

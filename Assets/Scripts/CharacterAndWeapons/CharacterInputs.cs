@@ -7,10 +7,14 @@ namespace GTA
     
     public enum eAnimationStates
     {
-        Running = 1,
+        Idle = 1,
+        
         Walk = 2,
-        Jump = 3,
-        Idle = 4
+        Run = 3,
+
+        Jump = 4,
+        Falling = 5,
+        Landing = 6
     }
     public class CharacterInputs : MonoBehaviour
     {

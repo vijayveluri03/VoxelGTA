@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2019577665548771304
 Transform:
   m_ObjectHideFlags: 0
@@ -172,7 +172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6781323121326332964
 Transform:
   m_ObjectHideFlags: 0
@@ -535,7 +535,7 @@ MonoBehaviour:
   strafeSpeedMax: 15
   strafeAcceleration: 7.5
   strafeDragHorizontal: 3
-  mouseIntensity: 5
+  mouseIntensity: 2
   rotationSlerpSpeed: 50
   jumpForceValue: 10
   gravity: -20
@@ -718,7 +718,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6781323119875697142
 Transform:
   m_ObjectHideFlags: 0
