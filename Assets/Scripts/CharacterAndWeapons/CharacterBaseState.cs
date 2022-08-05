@@ -371,7 +371,7 @@ namespace GTA
 
         }
 
-        public void Move_WithFixedUpdate(float forwardIntensity, float sideIntensity)
+        private void Move_WithFixedUpdate(float forwardIntensity, float sideIntensity)
         {
             //CommonBehaviour.movement.SetHorizontalVelocity( Vector3.zero );
 
