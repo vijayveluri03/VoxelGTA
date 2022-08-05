@@ -168,15 +168,17 @@ namespace Core
                     return;
                 }
             }
-            //set current to peviousState
-            previousState = currentState;
+
             //exit previousState
-            if (previousState.HasValue)
+            if (currentState.HasValue)
             {
-                Core.QLogger.LogInfo(string.Format("FSM:On Exit called for \"{0}\" state ", previousState.Value));
-                statesDictionary[previousState.Value].OnExit();
+                Core.QLogger.LogInfo(string.Format("FSM:On Exit called for \"{0}\" state ", currentState.Value));
+                statesDictionary[currentState.Value].OnExit();
             }
 
+            previous2State = previousState;
+            //set current to peviousState
+            previousState = currentState;
             //set currentState to Next
             currentState = nextState;
 
@@ -184,7 +186,7 @@ namespace Core
             nextState = null;
             contextForNextState = null;
 
-            //enter current state
+            //enter next ( which is current now) state
             if (currentState.HasValue)
             {
                 Core.QLogger.LogInfo(string.Format("FSM:On Enter called for \"{0}\" state ", currentState.Value));
@@ -192,7 +194,7 @@ namespace Core
             }
 
             if (logToGUI)
-                Core.QLogger.LogToGUI(logToGUIIndex, currentState.HasValue ? currentState.Value.ToString() : " null ");
+                Core.QLogger.LogToGUI(logToGUIIndex, (currentState.HasValue ? currentState.Value.ToString() : " null ") + " < " +  (previousState.HasValue ? previousState.Value.ToString() : " null ") + " < " + (previous2State.HasValue ? previous2State.Value.ToString() : " null "));
         }
         public void SetLogToGUI(bool set, int index)
         {
@@ -200,6 +202,7 @@ namespace Core
             logToGUIIndex = index;
         }
 
+        T? previous2State = null;
         T? previousState = null;
         T? currentState = null;
         T? nextState = null;

@@ -96,9 +96,11 @@
     <Compile Include="Assets\CoreLib\FSMStateMachine\FSMController.cs" />
     <Compile Include="Assets\Scripts\CharacterAndWeapons\WeaponStates.cs" />
     <Compile Include="Assets\Scripts\Items\ItemOnMap.cs" />
+    <Compile Include="Assets\ExternalPackages\VoxelAnimals\Assets\Scripts\PlayerController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ExternalPackages\FreeVoxelGirl\ReadMe.txt" />
+    <None Include="Assets\ExternalPackages\VoxelAnimals\Documentation\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

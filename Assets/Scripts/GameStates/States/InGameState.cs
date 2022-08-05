@@ -79,7 +79,7 @@ namespace GTA
             cameraMonoScript = GameObject.Find("ThirdPersonCamera").GetComponent<ThirdPersonCamera>();
             cameraMonoScript.SetCharacterToFollow(charaterModelGO.transform);   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
 
-            player.EquipWeapon(eInventoryItem.Pistol);
+            //player.EquipWeapon(eInventoryItem.Pistol);
         }
 
         private void ExtractContext(object context)

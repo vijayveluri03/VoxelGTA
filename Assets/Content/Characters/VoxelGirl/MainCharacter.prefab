@@ -55,6 +55,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -66,6 +68,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -78,6 +81,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!136 &1486735432650421523
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -491,8 +495,8 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed by
-    Humanoid clips.\n\tTransform 'LeftLowerLeg'\n\tTransform 'LeftLowerArm'\n\tTransform
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'LeftLowerLeg'\n\tTransform 'LeftLowerArm'\n\tTransform
     'RightLowerArm'\n\tTransform 'LeftUpperLeg'\n\tTransform 'LeftUpperArm'\n\tTransform
     'RightLowerLeg'\n\tTransform 'RightUpperArm'\n\tTransform 'RightUpperLeg'\n\tFrom
     animation clip 'CustomAnimation_Walk'"
@@ -531,8 +535,8 @@ MonoBehaviour:
   strafeSpeedMax: 15
   strafeAcceleration: 7.5
   strafeDragHorizontal: 3
-  mouseIntensity: 0.5
-  rotationSlerpSpeed: 5
+  mouseIntensity: 5
+  rotationSlerpSpeed: 50
   jumpForceValue: 10
   gravity: -20
   dragVertical: 2
@@ -743,6 +747,8 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -754,6 +760,7 @@ SkinnedMeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

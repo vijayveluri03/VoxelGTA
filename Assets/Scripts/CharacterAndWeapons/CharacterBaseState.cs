@@ -5,145 +5,213 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class CharacterCommonState
+    public class CharacterCommonBehaviour
     {
-        public CharacterCommonState(CharacterController owner)
+        public CharacterCommonBehaviour(CharacterController owner)
         {
             this.owner = owner;
+            movement = new Movement(owner);
+            animation = new Animation(owner);
+            orientation = new Orientation(owner);
+            sharedData = new SharedData();
         }
 
-        #region Movement 
-
-        public Vector3 MoveWithForce_WithFixedUpdate(Vector3 pos, Vector3 force)
+        public class Movement
         {
-            pos += (force * Time.fixedDeltaTime);
-            return pos;
-        }
-        public Vector3 MoveBy(Vector3 pos, Vector3 delta)
-        {
-            pos += delta;
-            return pos;
-        }
-        public float verticalVelocity = 0;
-        public Vector3 horizontalVelocity = Vector3.zero;
+            public Movement (CharacterController owner ) { this.owner = owner; }
 
-        public Vector3 UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(Vector3 position)
-        {
-            if (!isGrounded)
-                verticalVelocity += inputs.gravity * Time.fixedDeltaTime;
-
-            position = MoveWithForce_WithFixedUpdate(position, horizontalVelocity);
-            position = MoveWithForce_WithFixedUpdate(position, Vector3.up * verticalVelocity);
-
-            if (reAdjustYBy != 0)
+            #region movement
+            public static Vector3 MoveWithForce_WithFixedUpdate(Vector3 pos, Vector3 force)
             {
-                position = MoveBy(position, new Vector3(0, reAdjustYBy, 0));
-                Core.QLogger.LogInfo("Readjustment : " + reAdjustYBy);
+                pos += (force * Time.fixedDeltaTime);
+                return pos;
             }
-            return position;
-        }
-        public bool IsFalling()
-        {
-            if (isGrounded)
-                return false;
-            return verticalVelocity < 0;
-        }
 
-        public bool AreVelocitiesZero()
-        {
-            if (verticalVelocity > 0.1f || horizontalVelocity.sqrMagnitude > 0.2f)
-                return false;
-            return true;
-        }
-
-        #endregion
-
-        #region Animation
-
-        public void SetAnimation(eAnimationStates state)
-        {
-            return; // not all animations are present at this moment 
-            if (previousState != state)
-                animator.SetInteger("AnimationState", (int)state);
-
-            previousState = state;
-        }
-
-        private eAnimationStates previousState = 0;
-        public Animator animator { get { return owner.Animator; } }
-
-        #endregion
-
-        #region Rotation and mouse 
-
-        public void ProcessMouseMovement_WithFixedUpdate()
-        {
-            // Hardcoded for now 
-            float mouseInputX = Input.GetAxis("Mouse X") * inputs.mouseIntensity;
-            //Core.QLogger.LogInfo("Mouse input" + mouseInputX);
-            Quaternion a = Quaternion.AngleAxis(mouseInputX * 360 * Time.fixedDeltaTime, Vector3.up);
-
-            float mouseInputY = Input.GetAxis("Mouse Y") * inputs.mouseIntensity;
-            //Core.QLogger.LogInfo("Mouse input" + mouseInputY);
-            Quaternion b = Quaternion.AngleAxis(mouseInputY * 360 * Time.fixedDeltaTime, Vector3.right);
-            /// todo : temp.!-- impliment y axis as well 
-            b = Quaternion.identity;
-
-            slerpToPseudo = slerpToPseudo * a * b;
-
-            // Quaternion q = transform.rotation;
-            // Quaternion deltaAngle = Quaternion.Euler ( 0, Mathf.Sign(h) * 30, 0 );
-            // slerpToPseudo = q * deltaAngle;
-
-        }
-
-        public Quaternion UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(Quaternion rot)
-        {
-            return Quaternion.Slerp(rot, slerpToPseudo, inputs.rotationSlerpSpeed * Time.fixedDeltaTime);
-        }
-
-
-        protected Quaternion slerpToPseudo = Quaternion.identity;
-
-
-        #endregion
-
-        #region Falling and Grounding 
-
-        public void DoGroundedCheck()
-        {
-            isGrounded = false;
-            reAdjustYBy = 0;
-
-            if (verticalVelocity > 0)
+            public static Vector3 MoveBy(Vector3 pos, Vector3 delta)
             {
-
+                return pos + delta;
             }
-            else
+
+            public void FixedUpdate()
             {
-                if (Physics.Raycast(inputs.centerTransform.position, -transform.up, out hitInfo, inputs.exactDistanceToBottom * 3, inputs.ground.value))
+                DoGroundedCheck();
+            }
+
+            public Vector3 GetPositionBasedOnVelocities_WithFixedUpdate(Vector3 position)
+            {
+                if (!IsGrounded)
+                    VerticalVelocity += inputs.gravity * Time.fixedDeltaTime;
+
+                position = MoveWithForce_WithFixedUpdate(position, HorizontalVelocity);
+                position = MoveWithForce_WithFixedUpdate(position, Vector3.up * VerticalVelocity);
+
+                if (verticalCorrectionDelta != 0)
                 {
-                    float hitDistanceFromCenter = Vector3.Distance(hitInfo.point, inputs.centerTransform.position);
-                    if (hitDistanceFromCenter <= inputs.acceptableDistanceToBottom)
+                    position = MoveBy(position, new Vector3(0, verticalCorrectionDelta, 0));
+                    Core.QLogger.LogInfo("Readjustment : " + verticalCorrectionDelta);
+                }
+                return position;
+            }
+
+            public void SetVerticalVelocity(float velocity)
+            {
+                VerticalVelocity = velocity;
+            }
+            public void SetHorizontalVelocity(Vector3 velocity)
+            {
+                HorizontalVelocity = velocity;
+            }
+
+            public bool IsFalling()
+            {
+                if (IsGrounded)
+                    return false;
+                return VerticalVelocity < 0;
+            }
+
+            public float GetHorizontalVelocity()
+            {
+                return HorizontalVelocity.magnitude;
+            }
+            public float GetVerticalVelocity()
+            {
+                return VerticalVelocity;
+            }
+
+            public bool AreVelocitiesZero()
+            {
+                if ( Mathf.Abs( VerticalVelocity ) > 0.01 || HorizontalVelocity.sqrMagnitude > 0.01)
+                    return false;
+                return true;
+            }
+
+            public float VerticalVelocity { get; private set; }
+            public Vector3 HorizontalVelocity { get; private set; }
+
+            #endregion
+
+            #region Falling and Grounding 
+
+            private void DoGroundedCheck()
+            {
+                IsGrounded = false;
+                verticalCorrectionDelta = 0;
+
+                // Is going up 
+                // todo - Do a roof check 
+                if (VerticalVelocity > 0)
+                {
+
+                }
+                // Is going down
+                else
+                {
+                    if (Physics.Raycast(inputs.centerTransform.position, -transform.up, out hitInfo, inputs.exactDistanceToBottom * 3, inputs.ground.value))
                     {
-                        isGrounded = true;
-                        verticalVelocity = 0;
-                    }
-                    if (hitDistanceFromCenter < inputs.exactDistanceToBottom)
-                    {
-                        // pushing it up
-                        reAdjustYBy = inputs.acceptableDistanceToBottom - inputs.exactDistanceToBottom;
+                        float hitDistanceFromCenter = Vector3.Distance(hitInfo.point, inputs.centerTransform.position);
+                        if (hitDistanceFromCenter <= inputs.acceptableDistanceToBottom)
+                        {
+                            IsGrounded = true;
+                            VerticalVelocity = 0;
+                        }
+                        if (hitDistanceFromCenter < inputs.exactDistanceToBottom)
+                        {
+                            // pushing it up
+                            verticalCorrectionDelta = inputs.acceptableDistanceToBottom - inputs.exactDistanceToBottom;
+                        }
                     }
                 }
             }
+
+            public bool IsGrounded { get; private set; }
+
+            private Transform transform { get { return owner.GameObject.transform; } }
+            private RaycastHit hitInfo = new RaycastHit();
+            private float verticalCorrectionDelta = 0;
+
+            #endregion
+
+            private CharacterInputs inputs { get { return owner.Inputs; } }
+
+            private CharacterController owner;
         }
 
-        private RaycastHit hitInfo = new RaycastHit();
+        public class Animation
+        {
+            public Animation( CharacterController owner) { this.owner = owner; }
 
-        public float reAdjustYBy { get; private set; }
-        public bool isGrounded { get; private set; }
-        public Transform transform { get { return owner.GameObject.transform; } }
-        #endregion
+            public void SetAnimation(eAnimationStates state)
+            {
+                return; // not all animations are present at this moment 
+                if (previousState != state)
+                    animator.SetInteger("AnimationState", (int)state);
+
+                previousState = state;
+            }
+
+            public Animator animator { get { return owner.Animator; } }
+            private eAnimationStates previousState = 0;
+            private CharacterController owner = null;
+        }
+
+        public class Orientation
+        {
+            public Orientation( CharacterController owner ) { this.owner = owner; }
+
+            public void FixedUpdate()
+            {
+                ProcessMouseMovement_WithFixedUpdate();
+            }
+
+
+            // @TODO - mouse is hardcoded here. 
+            private void ProcessMouseMovement_WithFixedUpdate()
+            {
+                // Hardcoded for now 
+                float mouseInputX = Input.GetAxis("Mouse X") * inputs.mouseIntensity;
+                //Core.QLogger.LogInfo("Mouse input" + mouseInputX);
+                Quaternion a = Quaternion.AngleAxis(mouseInputX * 360 * Time.fixedDeltaTime, Vector3.up);
+
+                float mouseInputY = Input.GetAxis("Mouse Y") * inputs.mouseIntensity;
+                //Core.QLogger.LogInfo("Mouse input" + mouseInputY);
+                Quaternion b = Quaternion.AngleAxis(mouseInputY * 360 * Time.fixedDeltaTime, Vector3.right);
+                /// todo : temp.!-- impliment y axis as well 
+                b = Quaternion.identity;
+
+                orientationDelta = a * b;
+
+                // Quaternion q = transform.rotation;
+                // Quaternion deltaAngle = Quaternion.Euler ( 0, Mathf.Sign(h) * 30, 0 );
+                // slerpToPseudo = q * deltaAngle;
+
+            }
+
+            public Quaternion GetRotationBasedOnInputs_WithFixedUpdate(Quaternion rot)
+            {
+                return Quaternion.Slerp(rot, rot * orientationDelta, inputs.rotationSlerpSpeed * Time.fixedDeltaTime);
+            }
+
+
+            private Quaternion orientationDelta = Quaternion.identity;
+
+            private CharacterController owner;
+            private CharacterInputs inputs { get { return owner.Inputs; } }
+        }
+
+
+        public class SharedData
+        {
+            public float forwardRawVelocity = 0;
+            public float strafeRawVelocity = 0;
+
+            public Vector3 PositionPseudo;
+            public Quaternion RotationPseudo;
+        }
+
+        public Movement movement = null;
+        public Animation animation = null;
+        public Orientation orientation = null;
+        public SharedData sharedData = null;
 
         private CharacterController owner;
         public CharacterInputs inputs { get { return owner.Inputs; } }
@@ -154,16 +222,13 @@ namespace GTA
         public Transform Transform { get { return Owner.GameObject.transform; } }
         public GameObject GameObject { get { return Owner.GameObject; } }
         public CharacterInputs Inputs { get { return Owner.Inputs; } }
-        public CharacterCommonState CommonState { get { return Owner.CommonState; } }
+        public CharacterCommonBehaviour CommonBehaviour { get { return Owner.CommonState; } }
         public Animator Animator { get { return Owner.Animator; } }
+        public CharacterCommonBehaviour.SharedData SharedData {  get { return CommonBehaviour.sharedData; } }
     }
 
     public class CharacterBaseState : FSMCStateWithCharacterSharedContext
     {
-
-        //private Rigidbody rb;
-        protected Vector3 PositionPseudo;
-        protected Quaternion RotationPseudo;
 
 
         private AnimationClip runAnimationClip = null;
@@ -183,7 +248,7 @@ namespace GTA
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-
+            Core.QLogger.LogToGUI(3, "Velocities : " + CommonBehaviour.movement.GetHorizontalVelocity() + " , " + CommonBehaviour.movement.GetVerticalVelocity());
         }
 
         public override void Update()
@@ -193,14 +258,14 @@ namespace GTA
 
         protected void CachePosition()
         {
-            PositionPseudo = Transform.position;
-            RotationPseudo = Transform.rotation;
+            SharedData.PositionPseudo = Transform.position;
+            SharedData.RotationPseudo = Transform.rotation;
 
         }
         protected void ApplyPosition()
         {
-            Transform.position = PositionPseudo;
-            Transform.rotation = RotationPseudo;
+            Transform.position = SharedData.PositionPseudo;
+            Transform.rotation = SharedData.RotationPseudo;
         }
     }
 
@@ -209,16 +274,17 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
+            CommonBehaviour.movement.SetHorizontalVelocity(Vector3.zero);
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
             CachePosition();
-            CommonState.DoGroundedCheck();
-            CommonState.ProcessMouseMovement_WithFixedUpdate();
+            CommonBehaviour.movement.FixedUpdate();
+            CommonBehaviour.orientation.FixedUpdate();
 
-            if (!CommonState.isGrounded)
+            if (!CommonBehaviour.movement.IsGrounded)
             {
                 SetState(CharacterController.eStates.Falling);
                 return;
@@ -228,18 +294,18 @@ namespace GTA
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
 
-            if (v != 0 || h != 0 || !CommonState.AreVelocitiesZero())
+            if (v != 0 || h != 0 || !CommonBehaviour.movement.AreVelocitiesZero())
             {
                 SetState(CharacterController.eStates.Walk, v, h);
                 return;
             }
 
-            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            SharedData.PositionPseudo = CommonBehaviour.movement.GetPositionBasedOnVelocities_WithFixedUpdate(SharedData.PositionPseudo);
+            SharedData.RotationPseudo = CommonBehaviour.orientation.GetRotationBasedOnInputs_WithFixedUpdate(SharedData.RotationPseudo);
             ApplyPosition();
 
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space))
             {
                 SetState(CharacterController.eStates.Jump);
             }
@@ -250,14 +316,12 @@ namespace GTA
         }
     }
 
-    public class CharacterIdleWalk : CharacterBaseState
+    public class CharacterWalk : CharacterBaseState
     {
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            forwardRaw = 0;
-            strafeRaw = 0;
-
+            
             if (arguments != null && arguments.Length == 2)
             {
                 // Move this based on previous values in previous frame 
@@ -271,16 +335,16 @@ namespace GTA
 
             CachePosition();
 
-            CommonState.DoGroundedCheck();
-            CommonState.ProcessMouseMovement_WithFixedUpdate();
+            CommonBehaviour.movement.FixedUpdate();
+            CommonBehaviour.orientation.FixedUpdate();
 
-            if (!CommonState.isGrounded)
+            if (!CommonBehaviour.movement.IsGrounded)
             {
                 SetState(CharacterController.eStates.Falling);
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space))
             {
                 SetState(CharacterController.eStates.Jump);
             }
@@ -291,10 +355,17 @@ namespace GTA
 
             Move_WithFixedUpdate(sideIntensity, forwardIntensity);
 
-            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            SharedData.PositionPseudo = CommonBehaviour.movement.GetPositionBasedOnVelocities_WithFixedUpdate(SharedData.PositionPseudo);
+            SharedData.RotationPseudo = CommonBehaviour.orientation.GetRotationBasedOnInputs_WithFixedUpdate(SharedData.RotationPseudo);
 
             ApplyPosition();// Vector3.Lerp ( transform.position, PositionPseudo, 0.75f  );
+
+            {
+                if (CommonBehaviour.movement.AreVelocitiesZero())
+                {
+                    SetState(CharacterController.eStates.Idle);
+                }
+            }
 
             //transform.rotation = Quaternion.Slerp ( transform.rotation, slerpToPseudo, inputs.rotationSpeed * Time.fixedDeltaTime );
 
@@ -302,36 +373,34 @@ namespace GTA
 
         public void Move_WithFixedUpdate(float forwardIntensity, float sideIntensity)
         {
-            CommonState.horizontalVelocity = Vector3.zero;
+            //CommonBehaviour.movement.SetHorizontalVelocity( Vector3.zero );
 
+            // FORWARD FORCE
             if (forwardIntensity != 0)
             {
-                this.forwardRaw += Inputs.acceleration * Time.fixedDeltaTime * Mathf.Sign(forwardIntensity);
-                this.forwardRaw = Mathf.Min(this.forwardRaw, Inputs.movementSpeedMax);
+                SharedData.forwardRawVelocity += Inputs.acceleration * Time.fixedDeltaTime * Mathf.Sign(forwardIntensity);
+                SharedData.forwardRawVelocity = Mathf.Min(SharedData.forwardRawVelocity, Inputs.movementSpeedMax);
+            }
+            if (sideIntensity != 0)
+            {
+                SharedData.strafeRawVelocity += Inputs.strafeAcceleration * Time.fixedDeltaTime * Mathf.Sign(sideIntensity);
+                SharedData.strafeRawVelocity = Mathf.Min(SharedData.strafeRawVelocity, Inputs.strafeSpeedMax);
             }
 
+            // BACKWARD DRAG
             if (Inputs.dragHorizontal != 0)
             {
-                this.forwardRaw /= 1 + Inputs.dragHorizontal * Time.fixedDeltaTime;
+                SharedData.forwardRawVelocity /= 1 + Inputs.dragHorizontal * Time.fixedDeltaTime;
             }
-
-            if (sideIntensity != 0)
-            {
-                this.strafeRaw += Inputs.strafeAcceleration * Time.fixedDeltaTime * Mathf.Sign(sideIntensity);
-                this.strafeRaw = Mathf.Min(this.strafeRaw, Inputs.strafeSpeedMax);
-            }
-
             if (Inputs.strafeDragHorizontal != 0)
             {
-                this.strafeRaw /= 1 + Inputs.strafeDragHorizontal * Time.fixedDeltaTime;
+                SharedData.strafeRawVelocity /= 1 + Inputs.strafeDragHorizontal * Time.fixedDeltaTime;
             }
 
-
-            CommonState.horizontalVelocity = (Transform.forward * this.forwardRaw) + (Transform.right * this.strafeRaw);
+            CommonBehaviour.movement.SetHorizontalVelocity( (Transform.forward * SharedData.forwardRawVelocity) + (Transform.right * SharedData.strafeRawVelocity));
 
             if (sideIntensity != 0)
             {
-
                 // Quaternion q = transform.rotation;
                 // Quaternion deltaAngle = Quaternion.Euler ( 0, Mathf.Sign(h) * 30, 0 );
                 // slerpToPseudo = q * deltaAngle;
@@ -343,9 +412,7 @@ namespace GTA
             base.Notify(arguments);
         }
 
-        private float forwardRaw = 0;
-        private float strafeRaw = 0;
-
+        
     }
 
     public class CharacterJump : CharacterBaseState
@@ -356,8 +423,14 @@ namespace GTA
 
             jumpCountFromGround = 0;
 
-            CommonState.SetAnimation(eAnimationStates.Jump);
-            CommonState.verticalVelocity += JumpIfPossibleAndReturnDetaForce(Inputs.jumpForceValue); ;
+            CommonBehaviour.animation.SetAnimation(eAnimationStates.Jump);
+            CommonBehaviour.movement.SetVerticalVelocity(CommonBehaviour.movement.VerticalVelocity + JumpIfPossibleAndReturnDetaForce(Inputs.jumpForceValue));
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            jumpCountFromGround = 0;
         }
 
         public override void FixedUpdate()
@@ -366,27 +439,31 @@ namespace GTA
 
             CachePosition();
 
-            CommonState.DoGroundedCheck();
+            CommonBehaviour.movement.FixedUpdate();
+            CommonBehaviour.orientation.FixedUpdate();
 
-            if (CommonState.isGrounded)
+            if (CommonBehaviour.movement.IsGrounded)
             {
-                if (CommonState.AreVelocitiesZero())
+                if (CommonBehaviour.movement.AreVelocitiesZero())
                     SetState(CharacterController.eStates.Idle);
                 else
                     SetState(CharacterController.eStates.Walk);
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            // double jump 
             {
-                CommonState.verticalVelocity += JumpIfPossibleAndReturnDetaForce(Inputs.jumpForceValue); ;
-                CommonState.SetAnimation(eAnimationStates.Jump);
+                //if (Input.GetKey(KeyCode.Space))
+                //{
+                //    CommonBehaviour.movement.SetVerticalVelocity(CommonBehaviour.movement.VerticalVelocity + JumpIfPossibleAndReturnDetaForce(Inputs.jumpForceValue));
+                //    CommonBehaviour.animation.SetAnimation(eAnimationStates.Jump);
+                //}
             }
 
-            if (CommonState.IsFalling())
+            if (CommonBehaviour.movement.IsFalling())
                 SetState(CharacterController.eStates.Falling);
 
-            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            SharedData.PositionPseudo = CommonBehaviour.movement.GetPositionBasedOnVelocities_WithFixedUpdate(SharedData.PositionPseudo);
+            SharedData.RotationPseudo = CommonBehaviour.orientation.GetRotationBasedOnInputs_WithFixedUpdate(SharedData.RotationPseudo);
 
             ApplyPosition();// Vector3.Lerp ( transform.position, PositionPseudo, 0.75f  );
         }
@@ -422,18 +499,19 @@ namespace GTA
 
             CachePosition();
 
-            CommonState.DoGroundedCheck();
+            CommonBehaviour.movement.FixedUpdate();
+            CommonBehaviour.orientation.FixedUpdate();
 
-            if (CommonState.isGrounded)
+            if (CommonBehaviour.movement.IsGrounded)
             {
-                if (CommonState.AreVelocitiesZero())
+                if (CommonBehaviour.movement.AreVelocitiesZero())
                     SetState(CharacterController.eStates.Idle);
                 else
                     SetState(CharacterController.eStates.Walk);
             }
 
-            PositionPseudo = CommonState.UpdateAndGetPositionBasedOnVelocities_WithFixedUpdate(PositionPseudo);
-            RotationPseudo = CommonState.UpdateAndGetRotationBasedOnVelocities_WithFixedUpdate(RotationPseudo);
+            SharedData.PositionPseudo = CommonBehaviour.movement.GetPositionBasedOnVelocities_WithFixedUpdate(SharedData.PositionPseudo);
+            SharedData.RotationPseudo = CommonBehaviour.orientation.GetRotationBasedOnInputs_WithFixedUpdate(SharedData.RotationPseudo);
 
             ApplyPosition();// Vector3.Lerp ( transform.position, PositionPseudo, 0.75f  );
 

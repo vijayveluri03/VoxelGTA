@@ -37,13 +37,11 @@ namespace GTA
         public UnityEngine.LayerMask ground;
 
 
-        [UnityEngine.Header("Ground")]
-        // public Transform bottomTransform;
-        // public Transform frontTransform;
-        public Transform centerTransform;
-        public float exactDistanceToBottom;
-        public float acceptableDistanceToBottom;
-        public float exactDistanceToFront;
+        [UnityEngine.Header("Character details")]
+        public Transform centerTransform;           // Character's center 
+        public float exactDistanceToBottom;         // to know the legs position
+        public float acceptableDistanceToBottom;    // to know the legs position - accurately 
+        public float exactDistanceToFront;          // To know the front position - for collisions 
 
 
 

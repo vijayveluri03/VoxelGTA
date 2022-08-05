@@ -17,18 +17,18 @@ namespace GTA
         public GameObject GameObject { get; private set; }
         public Animator Animator { get; private set; }
         public CharacterInputs Inputs { get; private set; }
-        public CharacterCommonState CommonState { get; private set; }
+        public CharacterCommonBehaviour CommonState { get; private set; }
 
         public void Init(GameObject characterObject)
         {
             GameObject = characterObject;
             Animator = GameObject.GetComponent<Animator>();
             Inputs = GameObject.GetComponent<CharacterInputs>();
-            CommonState = new CharacterCommonState(this);
+            CommonState = new CharacterCommonBehaviour(this);
 
             controller = new Core.FSMController<CharacterController, eStates>(this);
             controller.RegisterState(eStates.Idle, new CharacterIdle());
-            controller.RegisterState(eStates.Walk, new CharacterIdleWalk());
+            controller.RegisterState(eStates.Walk, new CharacterWalk());
             controller.RegisterState(eStates.Jump, new CharacterJump());
             controller.RegisterState(eStates.Falling, new CharacterFalling());
 
