@@ -31,7 +31,7 @@ namespace Core
                 if (mUniqueInstance == null)
                 {
                     mUniqueInstance = new T();
-                    if ( Core.QLogger.CanLogInfo ) Core.QLogger.LogInfo (string.Format("{0} instantiated.", typeof(T)));
+                    Core.QLogger.LogInfo (string.Format("{0} instantiated.", typeof(T)));
                 }
                 return mUniqueInstance;
             }
@@ -107,7 +107,7 @@ namespace Core
         protected virtual void Awake()
         {
 
-            if ( Core.QLogger.CanLogInfo ) Core.QLogger.LogInfo ( string.Format("{0} instantiated.", typeof(T)));
+            Core.QLogger.LogInfo ( string.Format("{0} instantiated.", typeof(T)));
 
             if (uniqueInstance == null)
             {

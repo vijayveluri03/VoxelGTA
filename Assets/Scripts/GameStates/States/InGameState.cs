@@ -11,42 +11,13 @@ namespace GTA
 
         public InGameState(Core.FSMStateMachine<GStateManager.eState> machine) : base(machine) { }
 
-        public override void OnEnter()
+        public override void OnEnter(System.Object context)
         {
-            base.OnEnter();
+            base.OnEnter(context);
+            ExtractContext(context);
 
-        }
-
-        public override void OnContext(System.Object context)
-        {
-            base.OnContext(context);
-            Core.QLogger.Assert(context != null && context is Core.SharedObjects<System.Object>);
-            sharedObjects = context as Core.SharedObjects<System.Object>;
-
-            // todo - why are we initializing everything in oncontext. seperate them into other methods
-
-            collisionProcessor = new CollisionProcessor();
-
-            GameObject charaterModelGO = GameObject.Instantiate(Core.ResourceManager.Instance.LoadAsset<UnityEngine.Object>("Characters/VoxelGirl/MainCharacter")) as GameObject;
-            if (charaterModelGO == null) Core.QLogger.LogErrorAndThrowException("VoxelGirl is not instantiated");
-
-            CharacterController controller = new CharacterController();
-            controller.Init(charaterModelGO);
-            WeaponController weaponController = new WeaponController();
-
-            player = new Player();
-            player.Init(controller, weaponController);
-
-            CollisionListener playerCollisionListener = charaterModelGO.GetComponentInChildren<CollisionListener>();
-            Core.QLogger.Assert(playerCollisionListener != null);
-            playerCollisionListener.Init(collisionProcessor.ProcessCollision, player);
-
-            cameraMonoScript = GameObject.Find("ThirdPersonCamera").GetComponent<ThirdPersonCamera>();
-            cameraMonoScript.SetCharacterToFollow(charaterModelGO.transform);   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
-
-            player.EquipWeapon(eInventoryItem.Pistol);
-
-            sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem).SwitchCamera(eCameraType.PLAYER_CAMERA);
+            BuildPlayer();
+            SwitchCameraToThirdPersonView();
 
             Core.Updater.Instance.FixedUpdater += FixedUpdate;
             Core.Updater.Instance.LateUpdater += LateUpdate;
@@ -84,9 +55,49 @@ namespace GTA
             Core.Updater.Instance.LateUpdater -= LateUpdate;
         }
 
+
+        #region PRIVATE 
+
+        private void BuildPlayer()
+        {
+            collisionProcessor = new CollisionProcessor();
+
+            GameObject charaterModelGO = GameObject.Instantiate(Core.ResourceManager.Instance.LoadAsset<UnityEngine.Object>("Characters/VoxelGirl/MainCharacter")) as GameObject;
+            if (charaterModelGO == null) Core.QLogger.LogErrorAndThrowException("VoxelGirl is not instantiated");
+
+            CharacterController controller = new CharacterController();
+            controller.Init(charaterModelGO);
+            WeaponController weaponController = new WeaponController();
+
+            player = new Player();
+            player.Init(controller, weaponController);
+
+            CollisionListener playerCollisionListener = charaterModelGO.GetComponentInChildren<CollisionListener>();
+            Core.QLogger.Assert(playerCollisionListener != null);
+            playerCollisionListener.Init(collisionProcessor.ProcessCollision, player);
+
+            cameraMonoScript = GameObject.Find("ThirdPersonCamera").GetComponent<ThirdPersonCamera>();
+            cameraMonoScript.SetCharacterToFollow(charaterModelGO.transform);   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
+
+            player.EquipWeapon(eInventoryItem.Pistol);
+        }
+
+        private void ExtractContext(object context)
+        {
+            Core.QLogger.Assert(context != null && context is Core.SharedObjects<System.Object>);
+            sharedObjects = context as Core.SharedObjects<System.Object>;
+        }
+
+        private void SwitchCameraToThirdPersonView()
+        {
+            sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem).SwitchCamera(eCameraType.PLAYER_CAMERA);
+        }
+
         iPlayer player = null;
         ThirdPersonCamera cameraMonoScript = null;
         CollisionProcessor collisionProcessor = null;
         private Core.SharedObjects<System.Object> sharedObjects = null;
+
+        #endregion
     }
 }

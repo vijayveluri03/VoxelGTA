@@ -1,0 +1,16 @@
+
+
+
+Backlog 
+
+1. Certain objects like uimanager ( which is a shared object ) cannot be instantied by anything else, apart from few builders. 
+2. try global specifier to set the scope globally. can be used to get the unity includes with in the scope for all the files. 
+3. remove UnityEngine namespace being inluded by default. 
+
+
+
+
+
+
+
+disable cameras on start. How do i enforce this ?

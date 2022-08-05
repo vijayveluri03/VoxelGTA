@@ -32,13 +32,13 @@ namespace Core
 		public void LoadLevel(string sceneFilePath, bool additive, Action completeAction, bool async)
 		{
 			if (!isInitiated) Initialize();
-			if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has begun");
+			Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has begun");
 			if (async)
 			{
 				AsyncOperation operation = SceneManager.LoadSceneAsync(sceneFilePath, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 				operation.completed += delegate (AsyncOperation o)
 				{
-					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
+					Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
 					if (completeAction != null) completeAction();
 				};
 			}
@@ -47,7 +47,7 @@ namespace Core
 				SceneManager.LoadScene(sceneFilePath, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 				if (completeAction != null)
 				{
-					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
+					Core.QLogger.LogInfo("Load scene " + sceneFilePath + " has completed");
 					completeAction();
 				}
 			}
@@ -57,12 +57,12 @@ namespace Core
 		{
 			if (async)
 			{
-				if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Unload of scene " + sceneFilePath + " has begun");
+				Core.QLogger.LogInfo("Unload of scene " + sceneFilePath + " has begun");
 
 				AsyncOperation operation = SceneManager.UnloadSceneAsync(sceneFilePath);
 				operation.completed += delegate (AsyncOperation o)
 				{
-					if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo("Unload of scene " + sceneFilePath + " has completed");
+					Core.QLogger.LogInfo("Unload of scene " + sceneFilePath + " has completed");
 					if (completeAction != null) completeAction();
 				};
 			}

@@ -94,7 +94,7 @@ namespace Core.EventSystem
                 return;
             } 
 
-            if ( Core.QLogger.CanLogInfo ) Core.QLogger.LogInfo (string.Format("GlobalEventsManager.Send found unhandled Event. [ Category: {0}   Action: {1}  Sender: {2}  Context: {3} ]",
+            Core.QLogger.LogInfo (string.Format("GlobalEventsManager.Send found unhandled Event. [ Category: {0}   Action: {1}  Sender: {2}  Context: {3} ]",
                                          evnt.category, evnt.action, (evnt.sender == null ? "null" : evnt.sender.ToString()), (evnt.context == null ? "null" : evnt.context.ToString())));
         }
         private void Send_Internal(string category, string action, object sender, object context, bool immediate = false )

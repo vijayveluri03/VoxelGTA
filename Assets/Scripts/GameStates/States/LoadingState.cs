@@ -88,15 +88,14 @@ namespace GTA
             }
         }
 
-        public override void OnEnter() { base.OnEnter(); }
-        public override void OnExit() { base.OnExit(); }
 
-        public override void OnContext(object context)
+        public override void OnEnter(object context)
         {
-            base.OnContext(context);
-            Core.QLogger.Assert(context != null && context is Core.SharedObjects<System.Object>);
-            sharedObjects = context as Core.SharedObjects<System.Object>;
+            base.OnEnter(context);
+            ExtractContext(context);
         }
+
+        public override void OnExit() { base.OnExit(); }
 
         private void CreateUIManager()
         {
@@ -118,6 +117,11 @@ namespace GTA
                     isLevelLoaded = true;
                 }, true
                 );
+        }
+        private void ExtractContext(object context)
+        {
+            Core.QLogger.Assert(context != null && context is Core.SharedObjects<System.Object>);
+            sharedObjects = context as Core.SharedObjects<System.Object>;
         }
 
         private Core.SharedObjects<System.Object> sharedObjects = null;

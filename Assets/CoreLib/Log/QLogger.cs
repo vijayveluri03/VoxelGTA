@@ -11,8 +11,8 @@ namespace Core
 		public enum Level
 		{
 			Info = 1,    // Prints everything 
-			Warnings = 2,   // Prints warnings and errors
-			Errors = 3      // prints only errors
+			Warning = 2,   // Prints warnings and errors
+			Error = 3      // prints only errors
 		}
 
 		public static void Assert ( bool logic, System.Object message = null )
@@ -24,28 +24,25 @@ namespace Core
 			m_logLevel = level;
 		}
 
-		public static bool CanLogWarning { get { return m_logLevel <= Level.Warnings || IsRunningInEditorMode; } }
 		public static void LogWarning(string message, bool includeTimeStamp = false)
 		{
-			Log(Level.Warnings, message, includeTimeStamp);
-		}
+            Log(Level.Warning, message, includeTimeStamp);
+        }
 
-		//public static bool CanLogError { get { return m_logLevel <= Level.Errors || IsRunningInEditorMode; }}
-		public static void LogError(string message, bool includeTimeStamp = false)
+        //public static bool CanLogError { get { return m_logLevel <= Level.Errors || IsRunningInEditorMode; }}
+        public static void LogError(string message, bool includeTimeStamp = false)
 		{
-			Log(Level.Errors, message, includeTimeStamp);
+			Log(Level.Error, message, includeTimeStamp);
 		}
 		public static void LogErrorAndThrowException(string message, bool includeTimeStamp = false)
 		{
-			Log(Level.Errors, message, includeTimeStamp);
+			Log(Level.Error, message, includeTimeStamp);
 			throw new System.InvalidOperationException(message);
 		}
 
-		public static bool CanLogInfo { get { return m_logLevel <= Level.Info || IsRunningInEditorMode; } }
 		public static void LogInfo(string message, bool includeTimeStamp = false)
 		{
-            if(CanLogInfo)
-    			Log(Level.Info, message, includeTimeStamp);
+  			Log(Level.Info, message, includeTimeStamp);
 		}
 		public static void LogToGUI ( int index, string message )
 		{
@@ -64,21 +61,21 @@ namespace Core
 		}
 		public static void Log(Core.QLogger.Level level, string message, bool includeTimeStamp = false)
 		{
-			bool isEditorMode = IsRunningInEditorMode;
+            if (m_logLevel > level)
+                return;
+
 			if (includeTimeStamp)
 				message = "[Time:" + Time.realtimeSinceStartup + "]" + message;
 
 			if (level == Core.QLogger.Level.Info)
 			{
-				if (m_logLevel <= level || isEditorMode)
 					Debug.Log("[QLearningSpace:Info] " + message);
 			}
-			else if (level == Core.QLogger.Level.Warnings)
+			else if (level == Core.QLogger.Level.Warning)
 			{
-				if (m_logLevel <= level || isEditorMode)
 					Debug.LogWarning("[QLearningSpace:Warn] " + message);
 			}
-			else if (level == Core.QLogger.Level.Errors)
+			else if (level == Core.QLogger.Level.Error)
 			{
 				Debug.LogError("[QLearningSpace:Err] " + message);
 			}
@@ -91,8 +88,7 @@ namespace Core
 
 		public static float DrawLineDuration { get; private set; }
 
-		private static bool IsRunningInEditorMode { get { return !UnityEngine.Application.isPlaying; } }
-		private static Core.QLogger.Level m_logLevel = Level.Warnings;
+		private static Core.QLogger.Level m_logLevel = Level.Warning;
 		private static QGUILogger GUILogger = null;
 
 	}

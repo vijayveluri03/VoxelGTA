@@ -115,7 +115,7 @@ namespace Core
         {
             if (currentState.HasValue && currentState.Value.Equals(newState))
             {
-                if (Core.QLogger.CanLogWarning) Core.QLogger.LogWarning(" Setting same state again " + newState.ToString());
+                Core.QLogger.LogWarning(" Setting same state again " + newState.ToString());
                 return;
             }
             if (nextState.HasValue && !nextState.Value.Equals(newState))
@@ -123,7 +123,7 @@ namespace Core
                 Core.QLogger.LogError(" We are swapping 2 states in 1 phrame (" + nextState.Value + "," + newState + "). This can cause unexpected behavior");
             }
 
-            if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo(string.Format("FSM:Queued \"{0}\" state ", newState));
+            Core.QLogger.LogInfo(string.Format("FSM:Queued \"{0}\" state ", newState));
             nextState = newState;
             contextForNextState = args;
         }
@@ -173,7 +173,7 @@ namespace Core
             //exit previousState
             if (previousState.HasValue)
             {
-                if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo(string.Format("FSM:On Exit called for \"{0}\" state ", previousState.Value));
+                Core.QLogger.LogInfo(string.Format("FSM:On Exit called for \"{0}\" state ", previousState.Value));
                 statesDictionary[previousState.Value].OnExit();
             }
 
@@ -187,7 +187,7 @@ namespace Core
             //enter current state
             if (currentState.HasValue)
             {
-                if (Core.QLogger.CanLogInfo) Core.QLogger.LogInfo(string.Format("FSM:On Enter called for \"{0}\" state ", currentState.Value));
+                Core.QLogger.LogInfo(string.Format("FSM:On Enter called for \"{0}\" state ", currentState.Value));
                 statesDictionary[currentState.Value].OnEnter(contextForNextState);
             }
 
