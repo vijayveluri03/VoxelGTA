@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GTA
 {
     //todo add an editor script to this to make it snap to ground whereever its placed
-    public class ItemOnMap : iInteractable
+    public class ItemOnMap : MonoBehaviour
     {
         public eInventoryItem itemOnMapType;
         public int count = 1;
@@ -34,6 +34,14 @@ namespace GTA
             collider.radius = radiusOfCollider;
             collider.isTrigger = true;
 
+            //adding collidables
+            var colidable = gameObject.AddComponent<Core.Collidable>();
+            gameObject.AddComponent<CollisionContext>();
+            (colidable.CollisionContext as CollisionContext).Owner = this;
+            (colidable.CollisionContext as CollisionContext).m_CollidableObjectType = Constants.CollidableObjects.Types.ITEM_ON_MAP;
+
+
+
 
             //UnityEngine.Component.Destroy ( this );
         }
@@ -57,10 +65,7 @@ namespace GTA
             yield break;
         }
 
-        public override string GetName()
-        {
-            return "ItemOnMap:" + itemOnMapType;
-        }
+        
 
         private const float radiusOfCollider = 0.75f;
     }
