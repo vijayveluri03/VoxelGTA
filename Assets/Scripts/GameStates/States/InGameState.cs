@@ -61,10 +61,12 @@ namespace GTA
         private void BuildPlayer()
         {
             collisionProcessor = new CollisionProcessor();
+            Core.CollisionDispatcher.Instance.CollsionHandlers += collisionProcessor.ProcessCollision;
 
             GameObject charaterModelGO = GameObject.Instantiate(Core.ResourceManager.Instance.LoadAsset<UnityEngine.Object>("Characters/VoxelGirl/MainCharacter")) as GameObject;
             if (charaterModelGO == null) Core.QLogger.LogErrorAndThrowException("VoxelGirl is not instantiated");
-
+           
+            
             CharacterController controller = new CharacterController();
             controller.Init(charaterModelGO);
             WeaponController weaponController = new WeaponController();
@@ -72,9 +74,15 @@ namespace GTA
             player = new Player();
             player.Init(controller, weaponController);
 
-            CollisionListener playerCollisionListener = charaterModelGO.GetComponentInChildren<CollisionListener>();
-            Core.QLogger.Assert(playerCollisionListener != null);
-            playerCollisionListener.Init(collisionProcessor.ProcessCollision, player);
+            //assign player collsion context
+            var CollidableComponent = charaterModelGO.GetComponent<Core.Collidable>();
+            Core.QLogger.Assert(CollidableComponent != null, "Collidable componet not present on" + charaterModelGO.name);
+            if (CollidableComponent)
+            {
+                (CollidableComponent.CollisionContext as PlayerCollisionContext).Player = player;
+            }
+            
+
 
             cameraMonoScript = GameObject.Find("ThirdPersonCamera").GetComponent<ThirdPersonCamera>();
             cameraMonoScript.SetCharacterToFollow(charaterModelGO.transform);   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class Bullet : iInteractable
+    public class Bullet : Core.Collidable
     {
         public float speed;
 

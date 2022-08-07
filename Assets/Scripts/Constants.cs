@@ -11,5 +11,18 @@ namespace GTA
             public const string UIManager = "uimanager";
             public const string CameraSystem = "cameraSystem";
         };
+
+        public static class CollidableObjects
+        {
+            public enum Types
+            {
+                PLAYER_CHARACTER,
+                WOOD,
+                WATER,
+                ITEM_ON_MAP,
+
+            };
+        };
     }
+
 }
