@@ -101,7 +101,7 @@ namespace Core
                 actionStatus[keymap.Key] = newStatus;
             }
 
-            // FIRES THE EVENTS TO THE REGISTED LISTENERS 
+            // FIRES THE EVENTS TO THE REGISTERED LISTENERS 
             // THIS STEP IS INTENTIONALLY DELAYED TILL THE END OF ALL THE KEYS BEING UPDATED. THIS IS TO PREVENT HALF BAKED STATUS VALUES
 
             foreach (var key in keysPressesInThisFrame)

@@ -96,7 +96,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 341dba528ba2d411680ce37f4d436645, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterToFollow: {fileID: 0}
-  offsetDistance: {x: 0, y: 1, z: -3}
-  movementSpeed: 1.8
-  rotationSpeed: 5
+  modePropertiesArr:
+  - mode: 0
+    transformToFollow: {fileID: 0}
+    positionOffset: {x: 0, y: 1, z: -3}
+    lookatOffset: {x: 0, y: 0.5, z: 0}
+    movementSpeed: 3
+    rotationSpeed: 15
+  - mode: 1
+    transformToFollow: {fileID: 0}
+    positionOffset: {x: 1, y: 0.5, z: -1.2}
+    lookatOffset: {x: 1, y: 0.7, z: 10}
+    movementSpeed: 5
+    rotationSpeed: 20
+  - mode: 2
+    transformToFollow: {fileID: 0}
+    positionOffset: {x: -1, y: 0.5, z: -1.2}
+    lookatOffset: {x: -1, y: 0.7, z: 10}
+    movementSpeed: 5
+    rotationSpeed: 20
+  - mode: 3
+    transformToFollow: {fileID: 0}
+    positionOffset: {x: 0, y: 1, z: 1}
+    lookatOffset: {x: 0, y: 1, z: 10}
+    movementSpeed: 30
+    rotationSpeed: 300
+  transitionProperties:
+    transitionTime: 1

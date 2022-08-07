@@ -14,7 +14,7 @@ namespace GTA
             BuildPlayer();
             BuildPlayerCamera();
             SwitchCameraToThirdPersonView();
-            ListenToActions();
+            ListenToUserActions();
         }
 
         ~Session()
@@ -87,7 +87,12 @@ namespace GTA
                 sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem).AddCamera(eCameraType.PLAYER_CAMERA, camera);
 
                 cameraScript = thirdPersonCamera.GetComponent<ThirdPersonCamera>();
-                cameraScript.SetCharacterToFollow(player.GetTransformForCameraToFollow());   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
+                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.THIRD_PERSON_CENTER, player.GetTransformForCameraToFollow());   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
+                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_LEFT, player.GetTransformForCameraToFollow());
+                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_RIGHT, player.GetTransformForCameraToFollow());
+                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.FIRST_PERSON, player.GetTransformForCameraToFollow());
+
+                cameraScript.SnapToMode(ThirdPersonCamera.eMode.THIRD_PERSON_CENTER);
             }
         }
 
@@ -97,7 +102,7 @@ namespace GTA
             sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem).SwitchCamera(eCameraType.PLAYER_CAMERA);
         }
 
-        private void ListenToActions()
+        private void ListenToUserActions()
         {
             inputSystem.RegisterPressEvent(eInputAction.SWITCH_PLAYER_CAMERA, OnCameraSwitchAction);
 #if DEBUG
@@ -108,7 +113,27 @@ namespace GTA
         private void OnCameraSwitchAction()
         {
             Core.QLogger.Assert(cameraScript != null);
-            cameraScript.SwitchCameraPreset();
+
+            ThirdPersonCamera.eMode nextMode = cameraScript.Mode;
+            switch (cameraScript.Mode)
+            {
+                case ThirdPersonCamera.eMode.UNDEFINED:
+                    nextMode = ThirdPersonCamera.eMode.THIRD_PERSON_CENTER;
+                    break;
+                case ThirdPersonCamera.eMode.THIRD_PERSON_CENTER:
+                    nextMode = ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_LEFT;
+                    break;
+                case ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_LEFT:
+                    nextMode = ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_RIGHT;
+                    break;
+                case ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_RIGHT:
+                    nextMode = ThirdPersonCamera.eMode.FIRST_PERSON;
+                    break;
+                case ThirdPersonCamera.eMode.FIRST_PERSON:
+                    nextMode = ThirdPersonCamera.eMode.THIRD_PERSON_CENTER;
+                    break;
+            }
+            cameraScript.TransitionToMode(nextMode);
         }
 
 #if DEBUG

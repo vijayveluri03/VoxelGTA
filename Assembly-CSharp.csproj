@@ -86,6 +86,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\Idle.cs" />
     <Compile Include="Assets\Scripts\RegisterInputs.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\Knockback.cs" />
+    <Compile Include="Assets\Scripts\Session.cs" />
     <Compile Include="Assets\Scripts\Collisions\CollisionProcessor.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\IKHands.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\Code\PlayerMachine.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperCollider.cs" />
     <Compile Include="Assets\Scripts\Weapons\WeaponController.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\HitContext.cs" />
+    <Compile Include="Assets\CoreLib\InputSystem.cs" />
     <Compile Include="Assets\Scripts\Application.cs" />
     <Compile Include="Assets\CoreLib\Updater.cs" />
     <Compile Include="Assets\Scripts\GameStates\States\LoadingState.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\DoubleJump.cs" />
     <Compile Include="Assets\Scripts\CharacterAndWeapons\Player.cs" />
     <Compile Include="Assets\CoreLib\UnityIncludes.cs" />
+    <Compile Include="Assets\Scripts\InputSystem.cs" />
     <Compile Include="Assets\Scripts\Collisions\Contexts\PlayerCollisionContext.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\GetHit.cs" />
     <Compile Include="Assets\ExternalPackages\VoxelAnimals\Assets\Scripts\PlayerController.cs" />
@@ -170,9 +173,6 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterController.cs" />
     <Compile Include="Assets\Scripts\CharacterAndWeapons\WeaponStates.cs" />
     <Compile Include="Assets\Scripts\Items\ItemOnMap.cs" />
-    <Compile Include="Assets\Scripts\InputSystem.cs" />
-    <Compile Include="Assets\CoreLib\InputSystem.cs" />
-    <Compile Include="Assets\Scripts\Session.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ExternalPackages\FreeVoxelGirl\ReadMe.txt" />
