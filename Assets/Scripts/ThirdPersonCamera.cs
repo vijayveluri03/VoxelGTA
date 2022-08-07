@@ -28,6 +28,10 @@ namespace GTA
             this.characterToFollow = characterToFollow;
         }
 
+        public void SwitchCameraPreset()
+        {
+        }
+
         void FixedUpdate()
         {
             if (characterToFollow == null)

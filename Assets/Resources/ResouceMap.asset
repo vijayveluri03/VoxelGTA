@@ -25,4 +25,7 @@ MonoBehaviour:
   - obj: {fileID: 4619677965196628620, guid: 3e2d97617d798412e89820e47f595513, type: 3}
     path: Characters/Items/Pistol/Pistol
     overridePath: 0
+  - obj: {fileID: 8269055663263658930, guid: 0664ef64b1a268546a34292d87d187c4, type: 3}
+    path: Prefabs/ThirdPersonCamera
+    overridePath: 0
   FolderMapping: []

@@ -6,14 +6,16 @@ namespace Core
 {
     public class Collidable : MonoBehaviour
     {
-
         protected virtual void OnTriggerEnter(Collider other)
         {
-            Core.CollisionDispatcher.Instance.OnCollision(this, other.GetComponent<Collidable>());
+            CollisionDispatcher.Instance.OnCollisionNotify(this, other.GetComponent<Collidable>());
         }
 
-        public virtual string GetName() { return "CollisionListener from gameobject :" + gameObject.name; }
-        private ICollisionContext m_CollisionContext;
+        public virtual string GetName()
+        {
+            return gameObject.name;
+        }
+
         public ICollisionContext CollisionContext
         {
             get
@@ -28,6 +30,7 @@ namespace Core
                 m_CollisionContext = value;
             }
         }
-            
+
+        private ICollisionContext m_CollisionContext;
     }
 }

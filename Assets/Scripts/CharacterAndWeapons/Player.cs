@@ -5,13 +5,8 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class iPlayer : iListener
+    public class Player
     {
-        public WeaponController weaponController { get; private set; }
-        public CharacterController playerController { get; private set; }
-
-        public Inventory WeaponInventory { get; private set; }
-
         public void Init(CharacterController controller, WeaponController weaponController)
         {
             WeaponInventory = new Inventory();
@@ -64,16 +59,16 @@ namespace GTA
         {
 
         }
+
+        public Transform GetTransformForCameraToFollow()
+        {
+            Core.QLogger.Assert(playerController != null && playerController.GameObject != null);
+            return playerController.GameObject.transform;
+        }
+
+        public WeaponController weaponController { get; private set; }
+        public CharacterController playerController { get; private set; }
+        public Inventory WeaponInventory { get; private set; }
     }
 
-    public class iListener
-    {
-
-    }
-
-    public class Player : iPlayer
-    {
-
-
-    }
 }

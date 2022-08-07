@@ -6,6 +6,6 @@ namespace GTA
 {
     public class PlayerCollisionContext : CollisionContext
     {
-        public iPlayer Player;
+        public Player Player;
     }
 }

@@ -4,20 +4,30 @@ using UnityEngine;
 
 namespace Core
 {
+    using CollisionDelegate = System.Action<Collidable, Collidable>;
+
     public class CollisionDispatcher : Singleton<CollisionDispatcher>
     {
+        private CollisionDelegate collisionHandlers;
 
-        public System.Action<Collidable, Collidable> CollsionHandlers;
-        public void OnCollision(Collidable source, Collidable target)
+        public void Register (CollisionDelegate callback)
         {
+            collisionHandlers += callback;
+        }
+        public void UnRegister(CollisionDelegate callback)
+        {
+            collisionHandlers -= callback;
+        }
 
-            if (CollsionHandlers == null)
+        public void OnCollisionNotify(Collidable source, Collidable target)
+        {
+            if (collisionHandlers == null)
             {
-                Core.QLogger.LogWarning("there ar no listeners setup!!!! ", false);
+                QLogger.LogWarning("there are no listeners setup ", false);
                 return;
             }
-            CollsionHandlers.Invoke(source, target);
-
+            if (collisionHandlers != null)
+                collisionHandlers.Invoke(source, target);
         }
     }
 }

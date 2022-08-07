@@ -38,7 +38,7 @@ namespace GTA
             var colidable = gameObject.AddComponent<Core.Collidable>();
             gameObject.AddComponent<CollisionContext>();
             (colidable.CollisionContext as CollisionContext).Owner = this;
-            (colidable.CollisionContext as CollisionContext).m_CollidableObjectType = Constants.CollidableObjects.Types.ITEM_ON_MAP;
+            (colidable.CollisionContext as CollisionContext).Type = Constants.Collision.Type.ITEM_ON_MAP;
 
 
 

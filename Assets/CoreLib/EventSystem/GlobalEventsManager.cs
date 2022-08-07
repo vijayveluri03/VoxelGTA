@@ -1,77 +1,58 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
-
 using Utils;
 
-namespace Core.EventSystem
+namespace Core
 {
-
-    public class GlobalEventsManager : SingletonSpawningMonoBehaviour<GlobalEventsManager>
+    public class EventsManager<T> : SingletonSpawningMonoBehaviour<EventsManager<T>>
     {
         #region public interface
 
-        public delegate void SuscribeListenerCallback(string action, object sender, object context);
+        public delegate void SubscribeListenerCallback(T type, object sender, object context);
 
-        static public void SuscribeToEventCategory(string category, SuscribeListenerCallback callback)
+        static public void Subscribe(T type, SubscribeListenerCallback callback)
         {
-            Instance.SuscribeToEventCategory_Internal(category, callback);
+            Instance.Subscribe_Internal(type, callback);
         }
 
-        static public void UnsuscribeToEventCategory(string category, SuscribeListenerCallback callback)
+        static public void UnSubscribe(T type, SubscribeListenerCallback callback)
         {
-            Instance.UnsuscribeToEventCategory_Internal(category, callback);
+            Instance.UnsuscribeToEventtype_Internal(type, callback);
         }
 
-        static public void Send(string category, string action, object sender, object context, bool immediate = false )
+        static public void Send(T type, object sender, object context)
         {
-            Instance.Send_Internal(category, action, sender, context, immediate );
+            Instance.Send_Internal(type, sender, context, false);
+        }
+
+        static public void SendImmediate(T type, object sender, object context)
+        {
+            Instance.Send_Internal(type, sender, context, true);
         }
 
         #endregion
 
         private struct EventDetails
         {
-            public string category;
-            public string action;
+            public T type;
             public object sender;
             public object context;
         };
 
 
-        private void SuscribeToEventCategory_Internal(string category, SuscribeListenerCallback callback)
+        private void Subscribe_Internal(T type, SubscribeListenerCallback callback)
         {
-            if (listeners.ContainsKey(category))
-                listeners[category] += callback;
+            if (listeners.ContainsKey(type))
+                listeners[type] += callback;
             else
-                listeners.Add(category, callback);
-            
-            //SuscribeListenerCallback actionListener;
-            //listeners.TryGetValue(category, out actionListener);
-
-            //if (actionListener == null)
-            //{
-            //    listeners.Add(category, callback);
-            //    return;
-            //}
-
-            //actionListener += callback;
+                listeners.Add(type, callback);
         }
 
-        private void UnsuscribeToEventCategory_Internal(string category, SuscribeListenerCallback callback)
+        private void UnsuscribeToEventtype_Internal(T type, SubscribeListenerCallback callback)
         {
-            if (listeners.ContainsKey(category))
-                listeners[category] -= callback;
-            
-
-            //SuscribeListenerCallback actionListener;
-            //listeners.TryGetValue(category, out actionListener);
-
-            //if (actionListener != null)
-            //{
-            //    actionListener -= callback;
-            //}
+            if (listeners.ContainsKey(type))
+                listeners[type] -= callback;
         }
 
         private void Update () 
@@ -85,23 +66,22 @@ namespace Core.EventSystem
 
         private void Send_Immediate ( EventDetails evnt )
         {
-            SuscribeListenerCallback actionListener;
-            listeners.TryGetValue(evnt.category, out actionListener);
+            SubscribeListenerCallback actionListener;
+            listeners.TryGetValue(evnt.type, out actionListener);
 
             if(actionListener != null)
             {
-                actionListener(evnt.action, evnt.sender, evnt.context);
+                actionListener(evnt.type, evnt.sender, evnt.context);
                 return;
             } 
 
-            Core.QLogger.LogInfo (string.Format("GlobalEventsManager.Send found unhandled Event. [ Category: {0}   Action: {1}  Sender: {2}  Context: {3} ]",
-                                         evnt.category, evnt.action, (evnt.sender == null ? "null" : evnt.sender.ToString()), (evnt.context == null ? "null" : evnt.context.ToString())));
+            Core.QLogger.LogWarning (string.Format("EventsManager.Send found unhandled Event. [ Category: {0}   Sender: {1}  Context: {2} ]",
+                                         evnt.type, (evnt.sender == null ? "null" : evnt.sender.ToString()), (evnt.context == null ? "null" : evnt.context.ToString())));
         }
-        private void Send_Internal(string category, string action, object sender, object context, bool immediate = false )
+        private void Send_Internal(T type, object sender, object context, bool immediate = false )
         {
             EventDetails ed = new EventDetails();
-            ed.category = category;
-            ed.action = action; 
+            ed.type = type;
             ed.sender = sender;
             ed.context = context;
  
@@ -112,7 +92,6 @@ namespace Core.EventSystem
         }
 
         List <EventDetails> eventsToBeFiredInNextFrame = new List<EventDetails>();
-        Dictionary<string, SuscribeListenerCallback> listeners = new Dictionary<string, SuscribeListenerCallback>();
+        Dictionary<T, SubscribeListenerCallback> listeners = new Dictionary<T, SubscribeListenerCallback>();
     }
-
 }
