@@ -156,10 +156,12 @@ namespace GTA
             actionKeycodeMapping[eInputAction.STRAFE_LEFT] = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
             actionKeycodeMapping[eInputAction.STRAFE_RIGHT] = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
 
-            actionKeycodeMapping[eInputAction.SWITCH_PLAYER_CAMERA] = new List<KeyCode> { KeyCode.Tab };
+            actionKeycodeMapping[eInputAction.SWITCH_PLAYER_CAMERA] = new List<KeyCode> { KeyCode.C };
 
             actionKeycodeMapping[eInputAction.ACTION_1] = new List<KeyCode> { KeyCode.E, KeyCode.Mouse0 };
             actionKeycodeMapping[eInputAction.ACTION_2] = new List<KeyCode> { KeyCode.Mouse1 };
+
+            actionKeycodeMapping[eInputAction.TOGGLE_DEBUG_PANEL] = new List<KeyCode> { KeyCode.Tab };
 
             return actionKeycodeMapping;
         }

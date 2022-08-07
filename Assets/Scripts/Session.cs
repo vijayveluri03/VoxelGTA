@@ -100,6 +100,9 @@ namespace GTA
         private void ListenToActions()
         {
             inputSystem.RegisterPressEvent(eInputAction.SWITCH_PLAYER_CAMERA, OnCameraSwitchAction);
+#if DEBUG
+            inputSystem.RegisterPressEvent(eInputAction.TOGGLE_DEBUG_PANEL, OnDebugConsoleAction);
+#endif
         }
 
         private void OnCameraSwitchAction()
@@ -107,6 +110,13 @@ namespace GTA
             Core.QLogger.Assert(cameraScript != null);
             cameraScript.SwitchCameraPreset();
         }
+
+#if DEBUG
+        private void OnDebugConsoleAction()
+        {
+            Core.QLogger.ShowOrHideGUI();
+        }
+#endif
 
         Player player = null;
         CollisionProcessor collisionProcessor = null;

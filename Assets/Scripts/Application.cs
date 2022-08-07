@@ -17,8 +17,6 @@ namespace GTA
 
         public void Update()
         {
-            HandleCheats();
-
             if (gameStateManager != null)
                 gameStateManager.Update();
 
@@ -44,14 +42,6 @@ namespace GTA
         private void CreateSharedObject()
         {
             sharedObjects = new Core.SharedObjects<object>();
-        }
-
-        private void HandleCheats()
-        {
-            // @todo find a better place for cheats 
-            // @todo hard coded controls
-            if (Input.GetKeyDown(KeyCode.C))
-                Core.QLogger.ShowOrHideGUI();
         }
 
         private Core.SharedObjects<System.Object> sharedObjects = null;

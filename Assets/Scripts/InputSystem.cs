@@ -16,7 +16,9 @@ namespace GTA
         ACTION_1,       // Depends on context 
         ACTION_2,        // Depends on context
 
-        SWITCH_PLAYER_CAMERA
+        SWITCH_PLAYER_CAMERA,
+
+        TOGGLE_DEBUG_PANEL
     }
 }
 

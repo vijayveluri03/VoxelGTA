@@ -30,6 +30,7 @@ namespace GTA
 
         public void SwitchCameraPreset()
         {
+            Debug.LogError("triggered");
         }
 
         void FixedUpdate()
