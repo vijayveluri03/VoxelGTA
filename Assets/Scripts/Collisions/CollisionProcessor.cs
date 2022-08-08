@@ -33,6 +33,7 @@ namespace GTA
                     break;
             }
 
+            //so that the same collision doesnt trigger again in the current frame
             a.EnterCooldown();
             b.EnterCooldown();
 
@@ -47,7 +48,7 @@ namespace GTA
         interface ICollisionProcessor
         {
 
-            bool TryProcess(CollisionProcessor processor, Core.Collidable a, Core.Collidable b);
+            bool TryProcess(CollisionProcessor mainProcessor, Core.Collidable a, Core.Collidable b);
         }
         public class PlayerCollisionProcessor : ICollisionProcessor
         {
@@ -65,9 +66,9 @@ namespace GTA
                     Process(processor, bCollisionContext, aCollisionContext);
                 return true;
             }
-            public void Process(CollisionProcessor processor, GTACollisionContext me, GTACollisionContext other)
+            public void Process(CollisionProcessor mainProcessor, GTACollisionContext me, GTACollisionContext other)
             {
-                var player = processor.session.player;
+                var player = mainProcessor.session.player;
 
                 if (other.Type == Constants.Collision.Type.ITEM_ON_MAP)
                 {
