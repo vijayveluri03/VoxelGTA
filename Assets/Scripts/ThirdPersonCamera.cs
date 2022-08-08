@@ -28,6 +28,8 @@ namespace GTA
 
             [UnityEngine.SerializeField] public float movementSpeed;
             [UnityEngine.SerializeField] public float rotationSpeed;
+
+            [UnityEngine.SerializeField] public bool ignoreMovementSpeedAndSnap;
         }
 
         [System.Serializable]
@@ -82,6 +84,7 @@ namespace GTA
         }
 
 
+        // @todo move this to late update
         void FixedUpdate()
         {
             if (isTransisioning)
@@ -118,8 +121,16 @@ namespace GTA
 
             GetNextPositionAndRotation(currentMode.Value, out lerpTargetPosition, out slerpTargetRotation);
 
-            transform.position = (Vector3.Slerp(transform.position, lerpTargetPosition, currentModeProperties.movementSpeed * UnityEngine.Time.fixedDeltaTime));
-            transform.rotation = Quaternion.Slerp(transform.rotation, slerpTargetRotation, currentModeProperties.rotationSpeed * UnityEngine.Time.fixedDeltaTime);
+            if (currentModeProperties.ignoreMovementSpeedAndSnap)
+            {
+                transform.position = lerpTargetPosition;
+                transform.rotation = slerpTargetRotation;
+            }
+            else
+            {
+                transform.position = (Vector3.Slerp(transform.position, lerpTargetPosition, currentModeProperties.movementSpeed * UnityEngine.Time.fixedDeltaTime));
+                transform.rotation = Quaternion.Slerp(transform.rotation, slerpTargetRotation, currentModeProperties.rotationSpeed * UnityEngine.Time.fixedDeltaTime);
+            }
         }
 
         void GetNextPositionAndRotation(eMode mode, out Vector3 lerpTargetPosition, out Quaternion slerpTargetRotation)

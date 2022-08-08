@@ -134,7 +134,7 @@ namespace GTA
         //         slerpTo = q * deltaAngle;
         //     }
 
-        //     if ( Input.GetKeyDown( KeyCode.Space))
+        //     if ( InputSystem.IsPressed(eInputAction.JUMP))
         //     {
         //             JumpIfPossible ( jumpForceValue );
         //             verticalVelocity.y += VerticalForce;

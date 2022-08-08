@@ -86,6 +86,7 @@ namespace GTA
         public WeaponInputs inputs { get { return Owner.Inputs; } }
         public WeaponCommonState CommonState { get { return Owner.CommonState; } }
         public Animator animator { get { return Owner.Animator; } }
+        public Core.UnityInputSystem<eInputAction> InputSystem { get { return Owner.InputSystem; } }
     }
 
     public class WeaponBaseState : WeaponCore
@@ -118,13 +119,11 @@ namespace GTA
         {
             base.Update();
 
-            // temp hardcode 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (InputSystem.IsPressed(eInputAction.ACTION_1))
             {
                 SetState(WeaponController.eStates.Shoot);
             }
-            //temp hardcode
-            if (Input.GetKeyDown(KeyCode.R))
+            if (InputSystem.IsPressed(eInputAction.RELOAD))
             {
                 if (!CommonState.IsMagazineFull())
                     SetState(WeaponController.eStates.Reload);

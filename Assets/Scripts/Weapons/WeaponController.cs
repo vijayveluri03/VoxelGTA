@@ -19,10 +19,11 @@ namespace GTA
         public Animator Animator { get; private set; }
         public WeaponInputs Inputs { get; private set; }
         public WeaponCommonState CommonState { get; private set; }
+        public Core.UnityInputSystem<eInputAction> InputSystem { get; private set; }
 
-        public WeaponController()
+        public WeaponController(Core.UnityInputSystem<eInputAction> inputSystem)
         {
-
+            InputSystem = inputSystem;
         }
 
         public void EquipWeapon(GameObject WeaponObject)

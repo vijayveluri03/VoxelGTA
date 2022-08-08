@@ -177,6 +177,7 @@
   <ItemGroup>
     <None Include="Assets\ExternalPackages\FreeVoxelGirl\ReadMe.txt" />
     <None Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\README.txt" />
+    <None Include="Assets\Content\Materials\CrossHair.shader" />
     <None Include="Assets\ExternalPackages\VoxelAnimals\Documentation\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

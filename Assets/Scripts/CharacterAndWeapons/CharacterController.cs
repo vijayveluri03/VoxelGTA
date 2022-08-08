@@ -18,9 +18,12 @@ namespace GTA
         public Animator Animator { get; private set; }
         public CharacterInputs Inputs { get; private set; }
         public CharacterCommonBehaviour CommonState { get; private set; }
+        public Core.UnityInputSystem<eInputAction> InputSystem { get; private set; }
 
-        public void Init(GameObject characterObject)
+        public void Init(GameObject characterObject, Core.UnityInputSystem<eInputAction> inputSystem)
         {
+            InputSystem = inputSystem;
+
             GameObject = characterObject;
             Animator = GameObject.GetComponent<Animator>();
             Inputs = GameObject.GetComponent<CharacterInputs>();

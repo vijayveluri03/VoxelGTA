@@ -151,10 +151,13 @@ namespace GTA
             Dictionary<eInputAction, List<KeyCode>> actionKeycodeMapping = new Dictionary<eInputAction, List<KeyCode>>();
 
             actionKeycodeMapping[eInputAction.MOVE_FORWARD] = new List<KeyCode>{ KeyCode.W, KeyCode.UpArrow };
-            actionKeycodeMapping[eInputAction.MOVE_BACKWARD] = new List<KeyCode> { KeyCode.D, KeyCode.DownArrow };
+            actionKeycodeMapping[eInputAction.MOVE_BACKWARD] = new List<KeyCode> { KeyCode.S, KeyCode.DownArrow };
 
             actionKeycodeMapping[eInputAction.STRAFE_LEFT] = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
             actionKeycodeMapping[eInputAction.STRAFE_RIGHT] = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
+
+            actionKeycodeMapping[eInputAction.JUMP] = new List<KeyCode> { KeyCode.Space };
+            actionKeycodeMapping[eInputAction.RELOAD] = new List<KeyCode> { KeyCode.R };
 
             actionKeycodeMapping[eInputAction.SWITCH_PLAYER_CAMERA] = new List<KeyCode> { KeyCode.C };
 

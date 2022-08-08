@@ -13,6 +13,9 @@ namespace GTA
         STRAFE_LEFT,
         STRAFE_RIGHT,
 
+        JUMP,
+        RELOAD,
+
         ACTION_1,       // Depends on context 
         ACTION_2,        // Depends on context
 

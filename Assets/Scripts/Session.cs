@@ -61,8 +61,8 @@ namespace GTA
             Core.QLogger.Assert(charaterModelGO != null, "VoxelGirl is not instantiated");
 
             CharacterController controller = new CharacterController();
-            controller.Init(charaterModelGO);
-            WeaponController weaponController = new WeaponController();
+            controller.Init(charaterModelGO, inputSystem);
+            WeaponController weaponController = new WeaponController(inputSystem);
 
             player = new Player();
             player.Init(controller, weaponController);

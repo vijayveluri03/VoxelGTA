@@ -224,6 +224,7 @@ namespace GTA
         public CharacterCommonBehaviour CommonBehaviour { get { return Owner.CommonState; } }
         public Animator Animator { get { return Owner.Animator; } }
         public CharacterCommonBehaviour.SharedData SharedData {  get { return CommonBehaviour.sharedData; } }
+        public Core.UnityInputSystem<eInputAction> InputSystem { get { return Owner.InputSystem; } }
     }
 
     public class CharacterBaseState : FSMCStateWithCharacterSharedContext
@@ -284,12 +285,16 @@ namespace GTA
             }
 
             // Hardcoded for now 
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
+            //float h = Input.GetAxisRaw("Horizontal");
+            //float v = Input.GetAxisRaw("Vertical");
+
+            // hardcode for windows
+            float h = ( InputSystem.IsPressed(eInputAction.MOVE_FORWARD) ? 1 : 0 ) + (InputSystem.IsPressed(eInputAction.MOVE_BACKWARD) ? -1 : 0);
+            float v = (InputSystem.IsPressed(eInputAction.STRAFE_RIGHT) ? 1 : 0) + (InputSystem.IsPressed(eInputAction.STRAFE_LEFT) ? -1 : 0);
 
             if (v != 0 || h != 0 || !CommonBehaviour.movement.AreVelocitiesZero())
             {
-                SetState(CharacterController.eStates.Walk, v, h);
+                SetState(CharacterController.eStates.Walk);
                 return;
             }
 
@@ -298,7 +303,7 @@ namespace GTA
             ApplyPosition();
 
 
-            if (Input.GetKey(KeyCode.Space))
+            if (InputSystem.IsPressed(eInputAction.JUMP))
             {
                 SetState(CharacterController.eStates.Jump);
             }
@@ -315,11 +320,6 @@ namespace GTA
         {
             base.OnEnter(arguments);
             CommonBehaviour.animation.SetAnimation(eAnimationStates.Run);
-
-            if (arguments != null && arguments.Length == 2)
-            {
-                // Move this based on previous values in previous frame 
-            }
         }
 
 
@@ -338,16 +338,20 @@ namespace GTA
                 return;
             }
 
-            if (Input.GetKey(KeyCode.Space))
+            if (InputSystem.IsPressed(eInputAction.JUMP))
             {
                 SetState(CharacterController.eStates.Jump);
             }
 
             // Hardcoded for now 
-            float forwardIntensity = Input.GetAxisRaw("Horizontal");
-            float sideIntensity = Input.GetAxisRaw("Vertical");
+            //float forwardIntensity = Input.GetAxisRaw("Horizontal");
+            //float sideIntensity = Input.GetAxisRaw("Vertical");
 
-            Move_WithFixedUpdate(sideIntensity, forwardIntensity);
+            // hardcode for windows
+            float forwardIntensity = (InputSystem.IsPressed(eInputAction.MOVE_FORWARD) ? 1 : 0) + (InputSystem.IsPressed(eInputAction.MOVE_BACKWARD) ? -1 : 0);
+            float sideIntensity = (InputSystem.IsPressed(eInputAction.STRAFE_RIGHT) ? 1 : 0) + (InputSystem.IsPressed(eInputAction.STRAFE_LEFT) ? -1 : 0);
+
+            Move_WithFixedUpdate(forwardIntensity, sideIntensity);
 
             SharedData.PositionPseudo = CommonBehaviour.movement.GetPositionBasedOnVelocities_WithFixedUpdate(SharedData.PositionPseudo);
             SharedData.RotationPseudo = CommonBehaviour.orientation.GetRotationBasedOnInputs_WithFixedUpdate(SharedData.RotationPseudo);
@@ -444,7 +448,7 @@ namespace GTA
 
             // double jump 
             {
-                //if (Input.GetKey(KeyCode.Space))
+                //if (InputSystem.IsPressed(eInputAction.JUMP))
                 //{
                 //    CommonBehaviour.movement.SetVerticalVelocity(CommonBehaviour.movement.VerticalVelocity + JumpIfPossibleAndReturnDetaForce(Inputs.jumpForceValue));
                 //    CommonBehaviour.animation.SetAnimation(eAnimationStates.Jump);
