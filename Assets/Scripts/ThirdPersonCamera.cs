@@ -22,7 +22,6 @@ namespace GTA
         {
             [UnityEngine.SerializeField] public eMode mode;
 
-            [UnityEngine.SerializeField] public Transform transformToFollow;
             [UnityEngine.SerializeField] public Vector3 positionOffset;
             [UnityEngine.SerializeField] public Vector3 lookatOffset;
 
@@ -58,10 +57,9 @@ namespace GTA
             }
         }
 
-        public void SetTransformToFollow(eMode mode, Transform transformToFollow)
+        public void Init(PlayerAndCameraSharedModel data_readonly)
         {
-            Core.QLogger.Assert(modesMap.ContainsKey(mode));
-            modesMap[mode].transformToFollow = transformToFollow;
+            playerSharedData_ro = data_readonly;
         }
 
         public void SnapToMode(eMode mode)
@@ -76,7 +74,7 @@ namespace GTA
             if (currentMode == mode)
                 return;
 
-            Core.QLogger.Assert(modesMap.ContainsKey(mode) && modesMap[mode].transformToFollow != null);
+            Core.QLogger.Assert(modesMap.ContainsKey(mode));
 
             nextMode = mode;
             isTransisioning = true;
@@ -85,24 +83,25 @@ namespace GTA
 
 
         // @todo move this to late update
-        void FixedUpdate()
+        void LateUpdate()
         {
+            UpdateVerticalRotation();
             if (isTransisioning)
             {
-                FixedUpdateTransition();
+                UpdateTransition();
             }
             else
-                FixedUpdateCurrentMode();
+                UpdateCurrentMode();
         }
 
-        void FixedUpdateTransition()
+        void UpdateTransition()
         {
             Vector3 lerpTargetPosition;
             Quaternion slerpTargetRotation;
 
             GetNextPositionAndRotation(nextMode.Value, out lerpTargetPosition, out slerpTargetRotation);
 
-            currentTransitionTime += UnityEngine.Time.fixedDeltaTime;
+            currentTransitionTime += UnityEngine.Time.deltaTime;
             if(currentTransitionTime >= transitionProperties.transitionTime )
             {
                 currentTransitionTime = transitionProperties.transitionTime;
@@ -114,7 +113,7 @@ namespace GTA
             transform.rotation = Quaternion.Slerp(transform.rotation, slerpTargetRotation, currentTransitionTime / transitionProperties.transitionTime);
         }
 
-        void FixedUpdateCurrentMode()
+        void UpdateCurrentMode()
         {
             Vector3 lerpTargetPosition;
             Quaternion slerpTargetRotation;
@@ -128,20 +127,28 @@ namespace GTA
             }
             else
             {
-                transform.position = (Vector3.Slerp(transform.position, lerpTargetPosition, currentModeProperties.movementSpeed * UnityEngine.Time.fixedDeltaTime));
-                transform.rotation = Quaternion.Slerp(transform.rotation, slerpTargetRotation, currentModeProperties.rotationSpeed * UnityEngine.Time.fixedDeltaTime);
+                transform.position = (Vector3.Slerp(transform.position, lerpTargetPosition, currentModeProperties.movementSpeed * UnityEngine.Time.deltaTime));
+                transform.rotation = Quaternion.Slerp(transform.rotation, slerpTargetRotation * verticalRotation , currentModeProperties.rotationSpeed * UnityEngine.Time.deltaTime);
             }
         }
 
         void GetNextPositionAndRotation(eMode mode, out Vector3 lerpTargetPosition, out Quaternion slerpTargetRotation)
         {
-            Core.QLogger.Assert(modesMap.ContainsKey(mode) && modesMap[mode].transformToFollow != null);
+            Core.QLogger.Assert(modesMap.ContainsKey(mode) );
+            Core.QLogger.Assert(playerSharedData_ro != null && playerSharedData_ro.cameraTarget != null);
             ModeProperties modeProperties = modesMap[mode];
 
-            Vector3 transformedPositionOffsetBasedOnOrientation = modeProperties.transformToFollow.transform.localToWorldMatrix.MultiplyVector(modeProperties.positionOffset);
-            Vector3 transformedLookatOffsetBasedOnOrientation = modeProperties.transformToFollow.transform.localToWorldMatrix.MultiplyVector(modeProperties.lookatOffset);
-            lerpTargetPosition = modeProperties.transformToFollow.position + transformedPositionOffsetBasedOnOrientation;
-            slerpTargetRotation = Quaternion.LookRotation((modeProperties.transformToFollow.position + transformedLookatOffsetBasedOnOrientation) - lerpTargetPosition, Vector3.up);
+            Vector3 transformedPositionOffsetBasedOnOrientation = playerSharedData_ro.cameraTarget.localToWorldMatrix.MultiplyVector(modeProperties.positionOffset);
+            Vector3 transformedLookatOffsetBasedOnOrientation = playerSharedData_ro.cameraTarget.localToWorldMatrix.MultiplyVector(modeProperties.lookatOffset);
+            lerpTargetPosition = playerSharedData_ro.cameraTarget.position + transformedPositionOffsetBasedOnOrientation;
+            slerpTargetRotation = Quaternion.LookRotation((playerSharedData_ro.cameraTarget.position + transformedLookatOffsetBasedOnOrientation) - lerpTargetPosition, Vector3.up);
+        }
+
+        void UpdateVerticalRotation()
+        {
+            // TODO -  not a great solution!
+            verticalRotation = Quaternion.Slerp(verticalRotation, verticalRotation * playerSharedData_ro.verticalDelta, 10 /* rotation intensity TODO - magic number */ * Time.fixedDeltaTime);
+            //verticalRotation = verticalRotation * playerSharedData_ro.verticalDelta;
         }
 
         Vector3 MultiplyVectors(Vector3 a, Vector3 b)
@@ -157,18 +164,21 @@ namespace GTA
             }
         }
 
+        // MODES AND PROPERTIES
         [UnityEngine.SerializeField] ModeProperties[] modePropertiesArr;
         [UnityEngine.SerializeField] TransitionProperties transitionProperties;
-
-
+        Dictionary<eMode, ModeProperties> modesMap = new Dictionary<eMode, ModeProperties>();
         private eMode? currentMode = null;
         private eMode? nextMode = null;
 
-        // Transition states 
+
+        // TRANSITION
         bool isTransisioning = false;       // Is Transitioning from one mode to the next 
         float currentTransitionTime = 0;
 
-
-        Dictionary<eMode, ModeProperties> modesMap = new Dictionary<eMode, ModeProperties>();
+        // SHARED MODEL
+        private PlayerAndCameraSharedModel playerSharedData_ro = null;
+        private Quaternion verticalRotation = Quaternion.identity;
+        
     }
 }

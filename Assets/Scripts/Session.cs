@@ -87,11 +87,8 @@ namespace GTA
                 sharedObjects.TryFetch<Core.CameraSystem<eCameraType>>(Constants.SOKeys.CameraSystem).AddCamera(eCameraType.PLAYER_CAMERA, camera);
 
                 cameraScript = thirdPersonCamera.GetComponent<ThirdPersonCamera>();
-                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.THIRD_PERSON_CENTER, player.GetTransformForCameraToFollow());   // todo: Instead of directly providing the transform, provide an interface through which the trasform could be fetched. The player can extend the interface to provide the data
-                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_LEFT, player.GetTransformForCameraToFollow());
-                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_RIGHT, player.GetTransformForCameraToFollow());
-                cameraScript.SetTransformToFollow(ThirdPersonCamera.eMode.FIRST_PERSON, player.GetTransformForCameraToFollow());
-
+                cameraScript.Init(player.GetSharedModel_ReadOnly());
+                
                 cameraScript.SnapToMode(ThirdPersonCamera.eMode.THIRD_PERSON_CENTER);
             }
         }

@@ -171,13 +171,13 @@ namespace GTA
                 //Core.QLogger.LogInfo("Mouse input" + mouseInputX);
                 Quaternion a = Quaternion.AngleAxis(mouseInputX * 360 * Time.fixedDeltaTime, Vector3.up);
 
-                float mouseInputY = Input.GetAxis("Mouse Y") * inputs.mouseIntensity;
+                bool inverseMouse = true;// @todo - magic value
+                float mouseInputY = ( inverseMouse ? -1 : 1 ) * Input.GetAxis("Mouse Y") * inputs.mouseIntensity;
                 //Core.QLogger.LogInfo("Mouse input" + mouseInputY);
                 Quaternion b = Quaternion.AngleAxis(mouseInputY * 360 * Time.fixedDeltaTime, Vector3.right);
-                /// todo : temp.!-- impliment y axis as well 
-                b = Quaternion.identity;
-
-                orientationDelta = a * b;
+                
+                horizontalOrientationDelta = a;
+                verticalOrientationDelta = b;
 
                 // Quaternion q = transform.rotation;
                 // Quaternion deltaAngle = Quaternion.Euler ( 0, Mathf.Sign(h) * 30, 0 );
@@ -187,11 +187,13 @@ namespace GTA
 
             public Quaternion GetRotationBasedOnInputs_WithFixedUpdate(Quaternion rot)
             {
-                return Quaternion.Slerp(rot, rot * orientationDelta, inputs.rotationSlerpSpeed * Time.fixedDeltaTime);
+                return Quaternion.Slerp(rot, rot * horizontalOrientationDelta, inputs.rotationSlerpSpeed * Time.fixedDeltaTime);
             }
 
+            public Quaternion VerticalOrientationDelta {  get { return verticalOrientationDelta; } }
 
-            private Quaternion orientationDelta = Quaternion.identity;
+            private Quaternion horizontalOrientationDelta = Quaternion.identity;
+            private Quaternion verticalOrientationDelta = Quaternion.identity;
 
             private CharacterController owner;
             private CharacterInputs inputs { get { return owner.Inputs; } }

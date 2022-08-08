@@ -5,6 +5,12 @@ using UnityEngine;
 
 namespace GTA
 {
+    // @todo - is there a better way to do this ?
+    public class PlayerAndCameraSharedModel
+    {
+        public Transform cameraTarget;
+        public Quaternion verticalDelta;
+    };
     public class Player
     {
         public void Init(CharacterController controller, WeaponController weaponController)
@@ -32,6 +38,7 @@ namespace GTA
             {
                 weaponController.Update();
             }
+            UpdateSharedData();
         }
 
         public void LateUpdate()
@@ -40,6 +47,12 @@ namespace GTA
             {
                 playerController.LateUpdate();
             }
+        }
+
+        public void UpdateSharedData()
+        {
+            sharedData.cameraTarget = GetTransformForCameraToFollow();
+            sharedData.verticalDelta = playerController.CommonState.orientation.VerticalOrientationDelta;
         }
 
         public bool IsWeaponEquipped()
@@ -55,9 +68,15 @@ namespace GTA
             gun.transform.localRotation = Quaternion.identity;
             weaponController.EquipWeapon(gun);
         }
+
         public void UnEquipWeapon()
         {
 
+        }
+
+        public PlayerAndCameraSharedModel GetSharedModel_ReadOnly()
+        {
+            return sharedData;
         }
 
         public Transform GetTransformForCameraToFollow()
@@ -69,6 +88,8 @@ namespace GTA
         public WeaponController weaponController { get; private set; }
         public CharacterController playerController { get; private set; }
         public Inventory WeaponInventory { get; private set; }
+
+        private PlayerAndCameraSharedModel sharedData = new PlayerAndCameraSharedModel();
     }
 
 }

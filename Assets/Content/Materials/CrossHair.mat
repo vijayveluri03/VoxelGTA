@@ -60,7 +60,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FlipIndex: 3
+    - _FlipIndex: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -75,7 +75,7 @@ Material:
     - _ZWrite: 1
     - _flipIndex: 1
     m_Colors:
-    - _Color: {r: 0.7728043, g: 0.15574935, b: 0.9433962, a: 1}
+    - _Color: {r: 0.754717, g: 0.04881254, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FlipBookDimentions: {r: 2, g: 2, b: 0, a: 1}
     - _Flipbook: {r: 2, g: 2, b: 0, a: 1}

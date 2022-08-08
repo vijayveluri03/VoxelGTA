@@ -163,7 +163,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\SimpleActionHandler.cs" />
     <Compile Include="Assets\CoreLib\Utils\Extensions.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\Demo Elements\Code\NoJumpSlime.cs" />
-    <Compile Include="Assets\Scripts\CharacterAndWeapons\CharacterBaseState.cs" />
+    <Compile Include="Assets\Scripts\CharacterAndWeapons\CharacterStates.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperCharacterController.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\ActionHandler.cs" />
     <Compile Include="Assets\Scripts\GameStates\States\InGameState.cs" />
