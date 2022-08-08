@@ -8,8 +8,12 @@ namespace GTA
 {
     public class Application : MonoBehaviour
     {
+        
         void Start()
         {
+            Cursor.visible = !HideCursor;
+            Cursor.lockState = LockMode;
+
             CreateSharedObject();
             InitializeLogger();
             InitializeStateManager();
@@ -47,6 +51,9 @@ namespace GTA
         private Core.SharedObjects<System.Object> sharedObjects = null;
         private GStateManager gameStateManager;
         private Core.UIManager uiManager;
+
+        [SerializeField] private bool HideCursor = false;
+        [SerializeField] private CursorLockMode LockMode = CursorLockMode.None;
 
     }
 }
