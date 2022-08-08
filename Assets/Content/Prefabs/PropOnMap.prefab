@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4542701752503663497}
   - component: {fileID: 5959372278833445971}
   m_Layer: 0
-  m_Name: ItemOnMap
+  m_Name: PropOnMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,3 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f9d121f1488486c91e3ff0fe5cc77f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemOnMapType: 0
+  count: 1
+  hover: 0
+  isCollectable: 1

@@ -62,7 +62,7 @@ namespace GTA
 
         public void EquipWeapon(eInventoryItem item)
         {
-            GameObject gun = ItemFactory.Spawn(item);
+            GameObject gun = PropFactory.Spawn(item);
             gun.transform.parent = playerController.Inputs.weaponRoot;
             gun.transform.localPosition = Vector3.zero;
             gun.transform.localRotation = Quaternion.identity;

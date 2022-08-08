@@ -8,6 +8,16 @@ namespace Core
     {
         protected virtual void OnTriggerEnter(Collider other)
         {
+            var otherCollidable = other.GetComponent<Collidable>();
+            if( otherCollidable == null)
+            {
+                Core.QLogger.LogWarning("Collidable script not found in collider. So collision ignored for " + other.name);
+                return;
+            }
+
+            if (logTriggers || true)
+                Core.QLogger.LogWarning("Collision trigger enter (Collidable) : " + this.name);
+
             CollisionDispatcher.Instance.OnCollisionNotify(this, other.GetComponent<Collidable>());
         }
 
@@ -31,6 +41,22 @@ namespace Core
             }
         }
 
+        public void LateUpdate()
+        {
+            isInCoolDownTillEndOfFrame = false;
+        }
+
+        public void EnterCooldown()
+        {
+            isInCoolDownTillEndOfFrame = true;
+        }
+        public bool IsInCoolDown()
+        {
+            return isInCoolDownTillEndOfFrame;
+        }
+
         private ICollisionContext m_CollisionContext;
+        private bool logTriggers = false;
+        private bool isInCoolDownTillEndOfFrame = false;
     }
 }

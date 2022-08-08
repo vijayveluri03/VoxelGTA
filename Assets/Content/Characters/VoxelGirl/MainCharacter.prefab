@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 6778529378530911959}
   - component: {fileID: 5119480641292086926}
   - component: {fileID: 4045784370525390659}
-  - component: {fileID: 8691875852220727488}
+  - component: {fileID: 6209720504618323054}
   m_Layer: 10
   m_Name: MainCharacter
   m_TagString: Untagged
@@ -577,7 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4408883bd358c4485821aee01f5431ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8691875852220727488
+--- !u!114 &6209720504618323054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -586,11 +586,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6778376001415905232}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 987c0f1ca22868c4ca940a880261ce34, type: 3}
+  m_Script: {fileID: 11500000, guid: a29f05118cf5bde48ac22fe87212bd86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Name: 
-  m_CollidableObjectType: 0
+  Type: 0
   Audio: {fileID: 0}
   ParticleFX: {fileID: 0}
 --- !u!1 &6778376001614805592

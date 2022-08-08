@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace GTA
 {
-    public static class ItemFactory
+    public static class PropFactory
     {
-
         // Refactor needed. just temp code
         public static GameObject Spawn(eInventoryItem itemOnMap)
         {
@@ -34,8 +33,5 @@ namespace GTA
             hr.hoverRange = 0.2f;
             hr.minHoverDistanceAboveGround = 0.2f;
         }
-
-
-
     }
 }

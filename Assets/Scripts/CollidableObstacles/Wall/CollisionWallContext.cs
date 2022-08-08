@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class CollisionWallContext : CollisionContext
+    public class CollisionWallContext : GTACollisionContext
     {
         //can add aditonal proprties if requied
     }

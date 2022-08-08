@@ -100,7 +100,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterNavigationController.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\Jump.cs" />
     <Compile Include="Assets\CoreLib\Resources\ResourceManager.cs" />
-    <Compile Include="Assets\Scripts\Collisions\CollisionContext.cs" />
+    <Compile Include="Assets\Scripts\Collisions\GTACollisionContext.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Weapon\SwitchWeapon.cs" />
     <Compile Include="Assets\Scripts\Items\Inventory.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Lookups\Animations\Side.cs" />
@@ -143,7 +143,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Character\SlowTime.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\DebugDraw.cs" />
     <Compile Include="Assets\CoreLib\Log\QGUILogger.cs" />
-    <Compile Include="Assets\Scripts\Items\ItemFactory.cs" />
+    <Compile Include="Assets\Scripts\Items\PropFactory.cs" />
     <Compile Include="Assets\CoreLib\Utils\HoverAndRotate.cs" />
     <Compile Include="Assets\Scripts\GameStates\GStateManager.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\Navigation.cs" />
@@ -153,7 +153,6 @@
     <Compile Include="Assets\Scripts\CharacterAndWeapons\Player.cs" />
     <Compile Include="Assets\CoreLib\UnityIncludes.cs" />
     <Compile Include="Assets\Scripts\InputSystem.cs" />
-    <Compile Include="Assets\Scripts\Collisions\Contexts\PlayerCollisionContext.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\GetHit.cs" />
     <Compile Include="Assets\ExternalPackages\VoxelAnimals\Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterWeaponController.cs" />
@@ -172,7 +171,7 @@
     <Compile Include="Assets\CoreLib\Collisions\IICollisionContext.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterController.cs" />
     <Compile Include="Assets\Scripts\CharacterAndWeapons\WeaponStates.cs" />
-    <Compile Include="Assets\Scripts\Items\ItemOnMap.cs" />
+    <Compile Include="Assets\Scripts\Items\PropOnMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ExternalPackages\FreeVoxelGirl\ReadMe.txt" />

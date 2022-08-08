@@ -6,54 +6,111 @@ namespace GTA
 {
     public class CollisionProcessor
     {
-        public void Init()
+        public void Init(Session session)
         {
+            collisionProcessors.Add(new PlayerCollisionProcessor());
+            collisionProcessors.Add(new ProjectileCollisionProcessor());
+
+            this.session = session;
         }
 
         public void ProcessCollision(Core.Collidable a, Core.Collidable b)
         {
             Core.QLogger.Assert(a != null && b != null);
-            var ojecttype = (a.CollisionContext as CollisionContext).Type;
-            switch (ojecttype)
+
+            // Assuming that collisioncontext is manditory in this game!
+            Core.QLogger.Assert(a.CollisionContext != null && b.CollisionContext != null && a.CollisionContext is GTACollisionContext && b.CollisionContext is GTACollisionContext);
+
+            if (a.IsInCoolDown() || b.IsInCoolDown())
             {
-                case Constants.Collision.Type.PLAYER_CHARACTER:
+                Core.QLogger.LogWarning("Collidable in cooldown in ProcessCollision. If this happens often, we need a different approach!");
+                return;
+            }
 
-                    //if((b.CollisionContext as CollisionContext).Owner is ItemOnMap)
-                    //{
-                    //    iPlayer player = (a.CollisionContext as PlayerCollisionContext).Player;
-                    //    ItemOnMap itemOnMap = (b.CollisionContext as CollisionContext).Owner as ItemOnMap;
-                    //    if (player.WeaponInventory.CanICollect(itemOnMap.itemOnMapType, itemOnMap.count))
-                    //    {
-                    //        player.WeaponInventory.Collect(itemOnMap.itemOnMapType, itemOnMap.count);
-                    //        itemOnMap.OnItemCollected();
-
-                    //        Core.QLogger.LogWarning("Item collected : " + b.GetName());
-                    //    }
-                    //}
-                    break;
-                case Constants.Collision.Type.WATER:
-                    break;
-                case Constants.Collision.Type.WOOD:
+            foreach (var collisionProcessor in collisionProcessors)
+            {
+                if (collisionProcessor.TryProcess(this, a, b))
                     break;
             }
-            //if (a.IsThisPlayer)
+
+            a.EnterCooldown();
+            b.EnterCooldown();
+
+            Core.QLogger.LogWarning("Collision unhandled!");
+        }
+
+        private List<ICollisionProcessor> collisionProcessors = new List<ICollisionProcessor>();
+        private Session session;
+
+
+        // todo - need a better name 
+        interface ICollisionProcessor
+        {
+
+            bool TryProcess(CollisionProcessor processor, Core.Collidable a, Core.Collidable b);
+        }
+        public class PlayerCollisionProcessor : ICollisionProcessor
+        {
+            public bool TryProcess( CollisionProcessor processor, Core.Collidable a, Core.Collidable b)
             {
-                //Core.QLogger.Assert ( a.listener != null && a.listener is iPlayer );
+                GTACollisionContext aCollisionContext = a.CollisionContext as GTACollisionContext;
+                GTACollisionContext bCollisionContext = b.CollisionContext as GTACollisionContext;
 
-                //iPlayer player = a.listener as iPlayer;
-                //Core.QLogger.LogWarning("Receieved a collision event from " + b.GetName());
-                //if ( b is ItemOnMap )
-                //{
-                //    ItemOnMap itemOnMap = b as ItemOnMap;
-                //     if ( player.WeaponInventory.CanICollect( itemOnMap.itemOnMapType, itemOnMap.count )  )
-                //     {
-                //        player.WeaponInventory.Collect ( itemOnMap.itemOnMapType, itemOnMap.count );
-                //        itemOnMap.OnItemCollected();
+                if (aCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER && bCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER)
+                    return false;
 
-                //        Core.QLogger.LogWarning("Item collected : " + b.GetName());
-                //     }
-                //}
+                if (aCollisionContext.Type == Constants.Collision.Type.PLAYER_CHARACTER)
+                    Process( processor, aCollisionContext, bCollisionContext);
+                else
+                    Process(processor, bCollisionContext, aCollisionContext);
+                return true;
+            }
+            public void Process(CollisionProcessor processor, GTACollisionContext me, GTACollisionContext other)
+            {
+                var player = processor.session.player;
+
+                if (other.Type == Constants.Collision.Type.ITEM_ON_MAP)
+                {
+                    Core.QLogger.Assert(other.Owner is PropOnMap);
+                    PropOnMap itemOnMap = other.Owner as PropOnMap;
+
+                    if (player.WeaponInventory.CanICollect(itemOnMap.itemOnMapType, itemOnMap.count))
+                    {
+                        player.WeaponInventory.Collect(itemOnMap.itemOnMapType, itemOnMap.count);
+                        itemOnMap.OnItemCollected();
+
+                        player.EquipWeapon(itemOnMap.itemOnMapType);// @todo - not the ideal place for this 
+
+                        Core.QLogger.LogInfo("Item collected : " + other.Name + " of type " + other.Type);
+                    }
+                }
+                else
+                    Core.QLogger.Assert(false);// unhandled!
+            }
+        }
+
+        public class ProjectileCollisionProcessor : ICollisionProcessor
+        {
+            public bool TryProcess(CollisionProcessor processor, Core.Collidable a, Core.Collidable b)
+            {
+                return false;
+                //GTACollisionContext aCollisionContext = a.CollisionContext as GTACollisionContext;
+                //GTACollisionContext bCollisionContext = b.CollisionContext as GTACollisionContext;
+
+                //if (aCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER && bCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER)
+                //    return false;
+
+                //if (aCollisionContext.Type == Constants.Collision.Type.PLAYER_CHARACTER)
+                //    Process(b);
+                //else
+                //    Process(a);
+                //return true;
+            }
+            public void Process(Core.Collidable other)
+            {
+
             }
         }
     }
+
 }

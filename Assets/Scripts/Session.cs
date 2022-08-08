@@ -6,6 +6,8 @@ namespace GTA
 {
     public class Session
     {
+        public Player player { get; private set; }
+
         public Session(Core.SharedObjects<System.Object> sharedObjects)
         {
             this.sharedObjects = sharedObjects;
@@ -55,6 +57,7 @@ namespace GTA
         private void BuildPlayer()
         {
             collisionProcessor = new CollisionProcessor();
+            collisionProcessor.Init(this);
             Core.CollisionDispatcher.Instance.Register(collisionProcessor.ProcessCollision);
 
             GameObject charaterModelGO = GameObject.Instantiate(Core.ResourceManager.Instance.LoadAsset<UnityEngine.Object>("Characters/VoxelGirl/MainCharacter")) as GameObject;
@@ -70,10 +73,6 @@ namespace GTA
             //assign player collsion context
             var CollidableComponent = charaterModelGO.GetComponent<Core.Collidable>();
             Core.QLogger.Assert(CollidableComponent != null, "Collidable componet not present on" + charaterModelGO.name);
-            if (CollidableComponent)
-            {
-                (CollidableComponent.CollisionContext as PlayerCollisionContext).Player = player;
-            }
 
             //player.EquipWeapon(eInventoryItem.Pistol);
         }
@@ -140,7 +139,6 @@ namespace GTA
         }
 #endif
 
-        Player player = null;
         CollisionProcessor collisionProcessor = null;
         private Core.SharedObjects<System.Object> sharedObjects = null;
         private Core.UnityInputSystem<GTA.eInputAction> inputSystem = null;
