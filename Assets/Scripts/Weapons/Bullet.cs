@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class Bullet : Core.Collidable
+    public class Bullet : GTACollisionContext
     {
+        public override bool DisableOnStart { get { return false; } }
         public float speed;
 
         public void Init(Vector3 direction, float damage, float range)
@@ -26,13 +27,9 @@ namespace GTA
         }
         public void SelfDestroy()
         {
-            Core.QLogger.LogError("Self destroy ?");
+            GameObject.Destroy(gameObject);
         }
 
-        public override string GetName()
-        {
-            return "Bullet";
-        }
 
         private float distanceCovered = 0;
         private Vector3 direction;

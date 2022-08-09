@@ -23,14 +23,22 @@ namespace GTA
 
             if (a.IsInCoolDown() || b.IsInCoolDown())
             {
-                Core.QLogger.LogWarning("Collidable in cooldown in ProcessCollision. If this happens often, we need a different approach!");
+                //@todo - enable this 
+                //Core.QLogger.LogWarning("Collidable in cooldown in ProcessCollision. If this happens often, we need a different approach!");
                 return;
             }
 
+            var aCollisionContext = a.CollisionContext as GTACollisionContext;
+            var bCollisionContext = b.CollisionContext as GTACollisionContext;
+
+            bool handled = false;
             foreach (var collisionProcessor in collisionProcessors)
             {
-                if (collisionProcessor.TryProcess(this, a, b))
+                if (collisionProcessor.TryProcess(this, aCollisionContext, bCollisionContext))
+                {
+                    handled = true;
                     break;
+                }
             }
 
             //so that the same collision doesnt trigger again in the current frame
@@ -39,7 +47,8 @@ namespace GTA
             a.EnterCooldown();
             b.EnterCooldown();
 
-            Core.QLogger.LogWarning("Collision unhandled!");
+            if( !handled )
+                Core.QLogger.LogWarning("Collision unhandled! " + aCollisionContext.Type + "," + bCollisionContext.Type);
         }
 
         private List<ICollisionProcessor> collisionProcessors = new List<ICollisionProcessor>();
@@ -49,22 +58,19 @@ namespace GTA
         // todo - need a better name 
         interface ICollisionProcessor
         {
-            bool TryProcess(CollisionProcessor mainProcessor, Core.Collidable a, Core.Collidable b);
+            bool TryProcess(CollisionProcessor mainProcessor, GTACollisionContext a, GTACollisionContext b);
         }
         public class PlayerCollisionProcessor : ICollisionProcessor
         {
-            public bool TryProcess( CollisionProcessor processor, Core.Collidable a, Core.Collidable b)
+            public bool TryProcess( CollisionProcessor processor, GTACollisionContext a, GTACollisionContext b)
             {
-                GTACollisionContext aCollisionContext = a.CollisionContext as GTACollisionContext;
-                GTACollisionContext bCollisionContext = b.CollisionContext as GTACollisionContext;
-
-                if (aCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER && bCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER)
+                if (a.Type != Constants.Collision.Type.PLAYER_CHARACTER && b.Type != Constants.Collision.Type.PLAYER_CHARACTER)
                     return false;
 
-                if (aCollisionContext.Type == Constants.Collision.Type.PLAYER_CHARACTER)
-                    Process( processor, aCollisionContext, bCollisionContext);
+                if (a.Type == Constants.Collision.Type.PLAYER_CHARACTER)
+                    Process( processor, a, b);
                 else
-                    Process(processor, bCollisionContext, aCollisionContext);
+                    Process(processor, b, a);
                 return true;
             }
             public void Process(CollisionProcessor mainProcessor, GTACollisionContext me, GTACollisionContext other)
@@ -92,24 +98,32 @@ namespace GTA
 
         public class ProjectileCollisionProcessor : ICollisionProcessor
         {
-            public bool TryProcess(CollisionProcessor processor, Core.Collidable a, Core.Collidable b)
+            public bool TryProcess(CollisionProcessor processor, GTACollisionContext a, GTACollisionContext b)
             {
-                return false;
-                //GTACollisionContext aCollisionContext = a.CollisionContext as GTACollisionContext;
-                //GTACollisionContext bCollisionContext = b.CollisionContext as GTACollisionContext;
+                if (a.Type != Constants.Collision.Type.PROJECTILE && b.Type != Constants.Collision.Type.PROJECTILE)
+                    return false;
 
-                //if (aCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER && bCollisionContext.Type != Constants.Collision.Type.PLAYER_CHARACTER)
-                //    return false;
-
-                //if (aCollisionContext.Type == Constants.Collision.Type.PLAYER_CHARACTER)
-                //    Process(b);
-                //else
-                //    Process(a);
-                //return true;
+                if (a.Type == Constants.Collision.Type.PROJECTILE)
+                    Process(processor, a, b);
+                else
+                    Process(processor, b, a);
+                return true;
             }
-            public void Process(Core.Collidable other)
-            {
 
+            public void Process(CollisionProcessor mainProcessor, GTACollisionContext me, GTACollisionContext other)
+            {
+                if (other.Type == Constants.Collision.Type.WOOD)
+                {
+                    (me as Bullet).SelfDestroy();
+                    // todo - particles
+                }
+                else if (other.Type == Constants.Collision.Type.GROUND)
+                {
+                    (me as Bullet).SelfDestroy();
+                    // todo - particles
+                }
+                else
+                    Core.QLogger.Assert(false);// unhandled!
             }
         }
     }

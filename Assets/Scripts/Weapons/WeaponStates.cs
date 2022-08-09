@@ -116,7 +116,6 @@ namespace GTA
         {
             base.OnEnter(arguments);
             CommonState.SetAnimation(Weapon.eStates.Idle);
-            Core.QLogger.LogWarning("WeaponIdle");
         }
 
         public override void Update()
@@ -146,8 +145,7 @@ namespace GTA
         {
             base.OnEnter(arguments);
             CommonState.SetAnimation(Weapon.eStates.Shoot);
-            Core.QLogger.LogWarning("WeaponIdleWalk");
-
+            
             // Fire one bullet and go to recoil
             CommonState.FireBullet(1 /* accuracy */);
             SetState(Weapon.eStates.Recoil);
@@ -204,7 +202,6 @@ namespace GTA
         {
             base.OnEnter(arguments);
             CommonState.SetAnimation(Weapon.eStates.Recoil);
-            Core.QLogger.LogWarning("WeaponRecoil");
             recoilTime = 0;
         }
 

@@ -4,4 +4,9 @@ namespace Core
     {
 
     }
+
+    public class ICollisionContextMono : UnityEngine.MonoBehaviour , ICollisionContext
+    {
+
+    }
 }

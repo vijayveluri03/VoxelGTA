@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class GTACollisionContext : MonoBehaviour, Core.ICollisionContext
+    public class GTACollisionContext : Core.ICollisionContextMono
     {
         public void Start()
         {
-            this.enabled = false; // because we dont need the context to update everyframe
+            this.enabled = !DisableOnStart; // because we dont need the context to update everyframe
         }
 
         public string Name;
@@ -16,5 +16,7 @@ namespace GTA
         public AudioClip Audio;
         public GameObject ParticleFX;
         public System.Object Owner;
+
+        public virtual bool DisableOnStart {  get { return true;  } }
     }
 }

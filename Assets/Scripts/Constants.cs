@@ -21,6 +21,8 @@ namespace GTA
                 WOOD,
                 WATER,
                 ITEM_ON_MAP,
+                PROJECTILE,
+                GROUND
             };
 
             public const string CollidableLayer = "Collidable";

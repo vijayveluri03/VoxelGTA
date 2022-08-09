@@ -32,7 +32,7 @@ namespace GTA
 
         private void InitializeLogger()
         {
-            Core.QLogger.SetLoggingLevel(Core.QLogger.Level.Info);
+            Core.QLogger.SetLoggingLevel(Core.QLogger.Level.Warning);
         }
         private void InitializeStateManager()
         {

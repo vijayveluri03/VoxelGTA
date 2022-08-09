@@ -6,7 +6,7 @@ namespace Core
 {
     public class Collidable : MonoBehaviour
     {
-        protected virtual void OnTriggerEnter(Collider other)
+        protected void OnTriggerEnter(Collider other)
         {
             var otherCollidable = other.GetComponent<Collidable>();
             if( otherCollidable == null)
@@ -15,8 +15,24 @@ namespace Core
                 return;
             }
 
-            if (logTriggers || true)
+            if (logTriggers)
                 Core.QLogger.LogWarning("Collision trigger enter (Collidable) : " + this.name);
+
+            CollisionDispatcher.Instance.OnCollisionNotify(this, other.GetComponent<Collidable>());
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            var other = collision.collider;
+            var otherCollidable = other.GetComponent<Collidable>();
+            if (otherCollidable == null)
+            {
+                Core.QLogger.LogWarning("Collidable script not found in collider. So collision ignored for " + other.name);
+                return;
+            }
+
+            if (logTriggers)
+                Core.QLogger.LogWarning("Collision enter (Collidable) : " + this.name);
 
             CollisionDispatcher.Instance.OnCollisionNotify(this, other.GetComponent<Collidable>());
         }
@@ -30,14 +46,19 @@ namespace Core
         {
             get
             {
-                if (m_CollisionContext == null)
-                    m_CollisionContext = GetComponent<ICollisionContext>();
-                return m_CollisionContext;
+                if (m_collisionContext == null)
+                {
+                    if (m_collisionContextScript != null)
+                        m_collisionContext = m_collisionContextScript;
+                    else 
+                        m_collisionContext = GetComponent<ICollisionContext>();
+                }
+                return m_collisionContext;
             }
 
             set
             {
-                m_CollisionContext = value;
+                m_collisionContext = value;
             }
         }
 
@@ -55,7 +76,8 @@ namespace Core
             return isInCoolDownTillEndOfFrame;
         }
 
-        private ICollisionContext m_CollisionContext;
+        private ICollisionContext m_collisionContext;
+        [SerializeField] private ICollisionContextMono m_collisionContextScript; 
         private bool logTriggers = false;
         private bool isInCoolDownTillEndOfFrame = false;
     }

@@ -49,10 +49,13 @@ namespace Core
 			if ( GUILogger == null )
 			{
 				GUILogger = (new GameObject("QGUILogger")).AddComponent<QGUILogger>();
+
+                if(hideGUILoggerOnStart)
+                    GUILogger.InvertVisibility();
 			}
 			GUILogger.SetLog ( index, message );
 		}
-		public static void ShowOrHideGUI ()
+		public static void ToggleGUIVisibility ()
 		{
 			if ( GUILogger != null )
 			{
@@ -90,6 +93,7 @@ namespace Core
 
 		private static Core.QLogger.Level m_logLevel = Level.Warning;
 		private static QGUILogger GUILogger = null;
+        private static bool hideGUILoggerOnStart = true;
 
 	}
 }

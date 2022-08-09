@@ -164,7 +164,7 @@ namespace GTA
 #if DEBUG
         private void OnDebugConsoleAction()
         {
-            Core.QLogger.ShowOrHideGUI();
+            Core.QLogger.ToggleGUIVisibility();
         }
 #endif
 
