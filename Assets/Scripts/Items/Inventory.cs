@@ -8,6 +8,8 @@ namespace GTA
     {
         Unknown,
         Pistol,
+        Automatic_Pistol, 
+        Deagle,
         Grenade,
         ShotGun
     }
@@ -38,6 +40,8 @@ namespace GTA
             switch (item)
             {
                 case eInventoryItem.Pistol:
+                case eInventoryItem.Deagle:
+                case eInventoryItem.Automatic_Pistol:
                     return 2;
                 case eInventoryItem.ShotGun:
                     return 1;

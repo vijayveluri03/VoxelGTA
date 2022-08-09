@@ -291,8 +291,8 @@ namespace GTA
             //float v = Input.GetAxisRaw("Vertical");
 
             // hardcode for windows
-            float h = ( InputSystem.IsPressed(eInputAction.MOVE_FORWARD) ? 1 : 0 ) + (InputSystem.IsPressed(eInputAction.MOVE_BACKWARD) ? -1 : 0);
-            float v = (InputSystem.IsPressed(eInputAction.STRAFE_RIGHT) ? 1 : 0) + (InputSystem.IsPressed(eInputAction.STRAFE_LEFT) ? -1 : 0);
+            float h = ( InputSystem.IsPressedOrHeld(eInputAction.MOVE_FORWARD) ? 1 : 0 ) + (InputSystem.IsPressedOrHeld(eInputAction.MOVE_BACKWARD) ? -1 : 0);
+            float v = (InputSystem.IsPressedOrHeld(eInputAction.STRAFE_RIGHT) ? 1 : 0) + (InputSystem.IsPressedOrHeld(eInputAction.STRAFE_LEFT) ? -1 : 0);
 
             if (v != 0 || h != 0 || !CommonBehaviour.movement.AreVelocitiesZero())
             {
@@ -305,7 +305,7 @@ namespace GTA
             ApplyPosition();
 
 
-            if (InputSystem.IsPressed(eInputAction.JUMP))
+            if (InputSystem.IsPressedOrHeld(eInputAction.JUMP))
             {
                 SetState(CharacterController.eStates.Jump);
             }
@@ -340,7 +340,7 @@ namespace GTA
                 return;
             }
 
-            if (InputSystem.IsPressed(eInputAction.JUMP))
+            if (InputSystem.IsPressedOrHeld(eInputAction.JUMP))
             {
                 SetState(CharacterController.eStates.Jump);
             }
@@ -350,8 +350,8 @@ namespace GTA
             //float sideIntensity = Input.GetAxisRaw("Vertical");
 
             // hardcode for windows
-            float forwardIntensity = (InputSystem.IsPressed(eInputAction.MOVE_FORWARD) ? 1 : 0) + (InputSystem.IsPressed(eInputAction.MOVE_BACKWARD) ? -1 : 0);
-            float sideIntensity = (InputSystem.IsPressed(eInputAction.STRAFE_RIGHT) ? 1 : 0) + (InputSystem.IsPressed(eInputAction.STRAFE_LEFT) ? -1 : 0);
+            float forwardIntensity = (InputSystem.IsPressedOrHeld(eInputAction.MOVE_FORWARD) ? 1 : 0) + (InputSystem.IsPressedOrHeld(eInputAction.MOVE_BACKWARD) ? -1 : 0);
+            float sideIntensity = (InputSystem.IsPressedOrHeld(eInputAction.STRAFE_RIGHT) ? 1 : 0) + (InputSystem.IsPressedOrHeld(eInputAction.STRAFE_LEFT) ? -1 : 0);
 
             Move_WithFixedUpdate(forwardIntensity, sideIntensity);
 

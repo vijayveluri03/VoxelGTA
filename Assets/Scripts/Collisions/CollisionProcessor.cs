@@ -115,7 +115,7 @@ namespace GTA
                 Bullet bullet = me as Bullet;
                 if (other.Type == Constants.Collision.Type.WOOD)
                 {
-                    other.collidable.Rigidbody.AddForceAtPosition(bullet.Direction * bullet.collidable.Rigidbody.mass * bullet.Speed, bullet.Position, UnityEngine.ForceMode.Impulse);
+                    other.collidable.Rigidbody.AddForceAtPosition(bullet.Direction * bullet.Mass * bullet.Speed, bullet.Position, UnityEngine.ForceMode.Impulse);
 
                     (me as Bullet).SelfDestroy();
                     // todo - particles

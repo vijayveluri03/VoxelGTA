@@ -11,6 +11,7 @@ namespace GTA
         public float Speed { get { return speed; } }
         public Vector3 Direction {  get { return direction; } }
         public Vector3 Position { get { return transform.position; } }
+        public float Mass { get { return mass; } }
 
         public void Init(Vector3 direction, float damage, float range)
         {
@@ -36,6 +37,7 @@ namespace GTA
         private float distanceCovered = 0;
         private Vector3 direction;
         [SerializeField] private float speed;
+        [SerializeField] private float mass;
         private float damage;
         private float range;
     }

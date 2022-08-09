@@ -55,9 +55,9 @@ namespace GTA
             bulletsRemainingInMag--;
         }
 
-        public bool CanAutoShootNextBullet()
+        public bool IsAutomatic()
         {
-            return (inputs.shotType == eShotType.FULLY_AUTO && bulletsRemainingInMag > 0);
+            return (inputs.shotType == eShotType.FULLY_AUTO);
         }
 
         public bool IsMagazineEmpty()
@@ -65,10 +65,12 @@ namespace GTA
             Core.QLogger.Assert(bulletsRemainingInMag >= 0);
             return bulletsRemainingInMag <= 0;
         }
+
         public bool IsMagazineFull()
         {
             return (bulletsRemainingInMag == inputs.magCapacity);
         }
+
         public void SetBulletRemainingcount(int count)
         {
             bulletsRemainingInMag = count;
@@ -78,6 +80,7 @@ namespace GTA
         {
             SetBulletRemainingcount(inputs.magCapacity);
         }
+
         public int bulletsRemainingInMag { get; private set; }
         private Weapon owner;
         public WeaponInputs inputs { get { return owner.Inputs; } }
@@ -108,6 +111,19 @@ namespace GTA
         {
             base.Update();
         }
+
+        public bool CanFire()
+        {
+            if (CommonState.IsMagazineEmpty())
+                return false;
+
+            return (InputSystem.IsPressed(eInputAction.ACTION_1) || (CommonState.IsAutomatic() && InputSystem.IsPressedOrHeld(eInputAction.ACTION_1)));
+        }
+
+        public bool CanReload()
+        {
+            return InputSystem.IsPressedOrHeld(eInputAction.RELOAD) && !CommonState.IsMagazineFull();
+        }
     }
 
     public class WeaponIdle : WeaponBaseState
@@ -122,14 +138,13 @@ namespace GTA
         {
             base.Update();
 
-            if (InputSystem.IsPressed(eInputAction.ACTION_1))
+            if (CanFire())
             {
                 SetState(Weapon.eStates.Shoot);
             }
-            if (InputSystem.IsPressed(eInputAction.RELOAD))
+            if (CanReload())
             {
-                if (!CommonState.IsMagazineFull())
-                    SetState(Weapon.eStates.Reload);
+                SetState(Weapon.eStates.Reload);
             }
 
         }
@@ -166,35 +181,6 @@ namespace GTA
 
     }
 
-    public class WeaponReload : WeaponBaseState
-    {
-        public override void OnEnter(params object[] arguments)
-        {
-            base.OnEnter(arguments);
-            CommonState.SetAnimation(Weapon.eStates.Reload);
-            time = 0;
-        }
-
-        public override void Update()
-        {
-            base.Update();
-            time += Time.deltaTime;
-            if (time >= inputs.reloadTime)
-            {
-                if (Input.GetMouseButton(0) && CommonState.CanAutoShootNextBullet() && !CommonState.IsMagazineEmpty())
-                    SetState(Weapon.eStates.Shoot);
-                else
-                    SetState(Weapon.eStates.Idle);
-            }
-        }
-
-        public override void Notify(params object[] arguments)
-        {
-            base.Notify(arguments);
-        }
-        float time;
-    }
-
     public class WeaponRecoil : WeaponBaseState
     {
 
@@ -212,7 +198,7 @@ namespace GTA
             if (recoilTime >= inputs.recoilTime)
             {
                 //todo hardcode 
-                if (Input.GetMouseButton(0) && CommonState.CanAutoShootNextBullet() && !CommonState.IsMagazineEmpty())
+                if (CanFire())
                     SetState(Weapon.eStates.Shoot);
                 else if (CommonState.IsMagazineEmpty())
                     SetState(Weapon.eStates.Reload);
@@ -226,5 +212,32 @@ namespace GTA
             base.Notify(arguments);
         }
         float recoilTime;
+    }
+
+    public class WeaponReload : WeaponBaseState
+    {
+        public override void OnEnter(params object[] arguments)
+        {
+            base.OnEnter(arguments);
+            CommonState.SetAnimation(Weapon.eStates.Reload);
+            time = 0;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            time += Time.deltaTime;
+            if (time >= inputs.reloadTime)
+            {
+                CommonState.SetBulletRemainingcount(inputs.magCapacity);
+                SetState(Weapon.eStates.Idle);
+            }
+        }
+
+        public override void Notify(params object[] arguments)
+        {
+            base.Notify(arguments);
+        }
+        float time;
     }
 }

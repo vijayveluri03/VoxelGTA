@@ -27,6 +27,11 @@ namespace Core
 
         public bool IsPressed(ActionType action)
         {
+            return keysPressesInThisFrame.Contains(action);
+        }
+
+        public bool IsPressedOrHeld(ActionType action)
+        {
             if (actionStatus.ContainsKey(action))
                 return actionStatus[action];
             return false;
@@ -134,7 +139,7 @@ namespace Core
         private Dictionary<ActionType, OnKeyReleasedDelegate> keyReleasedListeners = new Dictionary<ActionType, OnKeyReleasedDelegate>();
 
         // CACHES THE CURRENT FRAME PRESSES AND RELEASES 
-        private List<ActionType> keysPressesInThisFrame = new List<ActionType>();
-        private List<ActionType> keysReleasesInThisFrame = new List<ActionType>();
+        private HashSet<ActionType> keysPressesInThisFrame = new HashSet<ActionType>();
+        private HashSet<ActionType> keysReleasesInThisFrame = new HashSet<ActionType>();
     }
 }

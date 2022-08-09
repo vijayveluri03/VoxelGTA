@@ -20,7 +20,7 @@ namespace GTA
             ListenToUserActions();
 
             // CHEATS
-            player.OnWeaponCollected(eInventoryItem.Pistol);
+            player.OnWeaponCollected(eInventoryItem.Automatic_Pistol);
         }
 
         ~Session()

@@ -9,12 +9,7 @@ namespace GTA
         // Refactor needed. just temp code
         public static GameObject Spawn(eInventoryItem itemOnMap)
         {
-            if (itemOnMap == eInventoryItem.Pistol)
-            {
-                return GameObject.Instantiate(GetObject(itemOnMap));
-            }
-            Core.QLogger.Assert(false);
-            return null;
+            return GameObject.Instantiate(GetObject(itemOnMap));
         }
 
         public static UnityEngine.GameObject GetObject(eInventoryItem itemOnMap)
@@ -23,10 +18,20 @@ namespace GTA
             {
                 return (Core.ResourceManager.Instance.LoadAsset<GameObject>("Characters/Items/Pistol/Pistol"));
             }
+            else if (itemOnMap == eInventoryItem.Automatic_Pistol)
+            {
+                return (Core.ResourceManager.Instance.LoadAsset<GameObject>("Characters/Items/Pistol/Auto_Pistol"));
+            }
+            else if (itemOnMap == eInventoryItem.Deagle)
+            {
+                return (Core.ResourceManager.Instance.LoadAsset<GameObject>("Characters/Items/Pistol/DEagle"));
+            }
+
             Core.QLogger.Assert(false);
             return null;
         }
 
+        //@todo - why is this here ?
         public static void MakeObjectHover(GameObject gameObject)
         {
             HoverAndRotate hr = gameObject.AddComponent<HoverAndRotate>();

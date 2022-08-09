@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 118299839154950929}
   - component: {fileID: 8486886051533080745}
   m_Layer: 0
-  m_Name: Pistol
+  m_Name: DEagle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,16 +203,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2e50155e0e8480e804c1379d72e896, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reloadTime: 3
-  magCapacity: 8
-  recoilTime: 0.2
+  reloadTime: 6
+  magCapacity: 5
+  recoilTime: 1
   accuracy: 1
   shotType: 0
   accuracyDeltaForFullAuto: 1
   damage: 4
   range: 10
   muzzlePositionAndDirection: {fileID: 948776489337664269}
-  bulletReference: {fileID: 6299352796604155934, guid: 7d2b19396b43a43a3b3554b4298f0a4c,
+  bulletReference: {fileID: 6299352796604155934, guid: 239b59de399a1ab4c8f79e3cefb5f581,
     type: 3}
 --- !u!95 &8486886051533080745
 Animator:
