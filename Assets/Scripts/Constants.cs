@@ -24,12 +24,14 @@ namespace GTA
             };
 
             public const string CollidableLayer = "Collidable";
+            public const string GroundLayer = "Ground";
+
             public static UnityEngine.LayerMask CollidableLayerMask
             {
                 get
                 {
                     if (!collidableMask.HasValue)
-                        collidableMask = UnityEngine.LayerMask.GetMask(CollidableLayer);
+                        collidableMask = UnityEngine.LayerMask.GetMask( new string[]{ CollidableLayer, GroundLayer });
                     return collidableMask.Value;
                 }
             }

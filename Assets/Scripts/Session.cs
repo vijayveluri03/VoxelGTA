@@ -15,6 +15,7 @@ namespace GTA
             inputSystem = sharedObjects.Fetch<Core.UnityInputSystem<eInputAction>>(Constants.SOKeys.InputSystem);
             BuildPlayer();
             BuildPlayerCamera();
+            BuildWeaponCameraMediatorAndAttachIt();
             SwitchCameraToThirdPersonView();
             ListenToUserActions();
 
@@ -90,6 +91,12 @@ namespace GTA
                 
                 cameraScript.SnapToMode(ThirdPersonCamera.eMode.THIRD_PERSON_CENTER);
             }
+        }
+
+        private void BuildWeaponCameraMediatorAndAttachIt()
+        {
+            var mediator = new WeaponCameraMediator(cameraScript);
+            player.PostInit(mediator);
         }
 
         // Dependency - Camera has to be set up first 

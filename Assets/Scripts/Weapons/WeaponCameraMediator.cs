@@ -7,14 +7,12 @@ namespace GTA
     public class WeaponCameraMediator
     {
 
-        public WeaponCameraMediator(ThirdPersonCamera camera, Weapon controller)
+        public WeaponCameraMediator(ThirdPersonCamera camera)
         {
             this.camera = camera;
-            this.weaponController = controller;
         }
 
         private ThirdPersonCamera camera;
-        private Weapon weaponController;
 
         public Vector3 GetWeaponDirection( Vector3 weaponPosition )
         {

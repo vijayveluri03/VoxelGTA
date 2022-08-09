@@ -40,6 +40,11 @@ namespace GTA
             this.playerController = controller;
         }
 
+        public void PostInit(WeaponCameraMediator weaponCameraMediator)
+        {
+            this.weaponCameraMediator = weaponCameraMediator;
+        }
+
         public void FixedUpdate()
         {
             if (playerController != null)
@@ -115,6 +120,7 @@ namespace GTA
             Weapon weapon = new Weapon(inputSystem);
             GameObject gun = PropFactory.Spawn(item);
             weapon.Initialize(gun);
+            weapon.PostInitialize(weaponCameraMediator);
 
             //#2
             AttachWeaponInSlot(weapon, slot);
@@ -240,6 +246,7 @@ namespace GTA
 
         private PlayerAndCameraSharedModel sharedData = new PlayerAndCameraSharedModel();
         private Core.UnityInputSystem<eInputAction> inputSystem = null;
+        private WeaponCameraMediator weaponCameraMediator = null;
 
         // WEAPONS
         private Dictionary<eWeaponSlot, Weapon> weaponsInHand = new Dictionary<eWeaponSlot, Weapon>();

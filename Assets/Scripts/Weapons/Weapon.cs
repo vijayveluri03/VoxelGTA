@@ -60,6 +60,12 @@ namespace GTA
             Core.QLogger.Assert(Inputs.muzzlePositionAndDirection != null);
         }
 
+        // todo - there must be a better way to do this instead of a mediator
+        public void PostInitialize(WeaponCameraMediator mediator)
+        {
+            this.mediator = mediator;
+        }
+
         public void UnInitialize()
         {
             // do something
@@ -77,7 +83,13 @@ namespace GTA
                 controller.Notify(arguments);
         }
 
+        public WeaponCameraMediator GetMediator()
+        {
+            return mediator;
+        }
+
         private Core.FSMController<Weapon, eStates> controller = null;
+        private WeaponCameraMediator mediator = null;
 
     }
 }

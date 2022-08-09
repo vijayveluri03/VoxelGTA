@@ -41,12 +41,16 @@ namespace GTA
         {
             Core.QLogger.Assert(bulletsRemainingInMag > 0);
 
+            // @todo - pooling please
             GameObject bullet = GameObject.Instantiate(inputs.bulletReference);
             bullet.transform.position = inputs.muzzlePositionAndDirection.position;
-            bullet.transform.forward = inputs.muzzlePositionAndDirection.forward;
+
+            Vector3 forward = owner.GetMediator().GetWeaponDirection(inputs.muzzlePositionAndDirection.position).normalized;
+            bullet.transform.forward = forward; //inputs.muzzlePositionAndDirection.forward;
+
             Bullet bulletScript = bullet.GetComponent<Bullet>();
             Core.QLogger.Assert(bulletScript != null);
-            bulletScript.Init(inputs.muzzlePositionAndDirection.forward, inputs.damage, inputs.range);
+            bulletScript.Init(forward, inputs.damage, inputs.range);
 
             bulletsRemainingInMag--;
         }
