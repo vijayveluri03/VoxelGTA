@@ -52,13 +52,29 @@ namespace Core
                         m_collisionContext = m_collisionContextScript;
                     else 
                         m_collisionContext = GetComponent<ICollisionContext>();
+
+                    if (m_collisionContext != null)
+                        m_collisionContext.SetCollidable(this);
                 }
                 return m_collisionContext;
             }
-
             set
             {
                 m_collisionContext = value;
+                if (m_collisionContext != null)
+                    m_collisionContext.SetCollidable(this);
+            }
+        }
+
+        public Rigidbody Rigidbody
+        {
+            get
+            {
+                if (m_rigidbody == null)
+                {
+                    m_rigidbody = GetComponent<Rigidbody>();
+                }
+                return m_rigidbody;
             }
         }
 
@@ -76,8 +92,11 @@ namespace Core
             return isInCoolDownTillEndOfFrame;
         }
 
+        private Rigidbody m_rigidbody;
         private ICollisionContext m_collisionContext;
         [SerializeField] private ICollisionContextMono m_collisionContextScript; 
+
+
         private bool logTriggers = false;
         private bool isInCoolDownTillEndOfFrame = false;
     }

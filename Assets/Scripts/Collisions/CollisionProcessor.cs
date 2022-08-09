@@ -112,8 +112,11 @@ namespace GTA
 
             public void Process(CollisionProcessor mainProcessor, GTACollisionContext me, GTACollisionContext other)
             {
+                Bullet bullet = me as Bullet;
                 if (other.Type == Constants.Collision.Type.WOOD)
                 {
+                    other.collidable.Rigidbody.AddForceAtPosition(bullet.Direction * bullet.collidable.Rigidbody.mass * bullet.Speed, bullet.Position, UnityEngine.ForceMode.Impulse);
+
                     (me as Bullet).SelfDestroy();
                     // todo - particles
                 }

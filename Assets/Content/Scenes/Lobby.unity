@@ -347,7 +347,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309490771}
   serializedVersion: 2
-  m_Mass: 0.3
+  m_Mass: 4
   m_Drag: 0.1
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -367,6 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29f05118cf5bde48ac22fe87212bd86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collidable: {fileID: 0}
   Name: 
   Type: 1
   Audio: {fileID: 0}
@@ -914,6 +915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29f05118cf5bde48ac22fe87212bd86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collidable: {fileID: 0}
   Name: 
   Type: 5
   Audio: {fileID: 0}
