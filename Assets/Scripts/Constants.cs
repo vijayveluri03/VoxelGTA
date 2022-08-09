@@ -22,6 +22,20 @@ namespace GTA
                 WATER,
                 ITEM_ON_MAP,
             };
+
+            public const string CollidableLayer = "Collidable";
+            public static UnityEngine.LayerMask CollidableLayerMask
+            {
+                get
+                {
+                    if (!collidableMask.HasValue)
+                        collidableMask = UnityEngine.LayerMask.GetMask(CollidableLayer);
+                    return collidableMask.Value;
+                }
+            }
+            private static UnityEngine.LayerMask? collidableMask = null;
+
+            public const int MaxDistanceForWeaponTargetCheck = 100;
         };
     }
 }

@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace GTA
 {
-    public class WeaponController
+
+
+    public class Weapon
     {
         public enum eStates
         {
@@ -21,19 +23,19 @@ namespace GTA
         public WeaponCommonState CommonState { get; private set; }
         public Core.UnityInputSystem<eInputAction> InputSystem { get; private set; }
 
-        public WeaponController(Core.UnityInputSystem<eInputAction> inputSystem)
+        public Weapon(Core.UnityInputSystem<eInputAction> inputSystem)
         {
             InputSystem = inputSystem;
         }
 
-        public void EquipWeapon(GameObject WeaponObject)
+        public void Initialize(GameObject WeaponObject)
         {
             GameObject = WeaponObject;
             Animator = GameObject.GetComponent<Animator>();
             Inputs = GameObject.GetComponent<WeaponInputs>();
             CommonState = new WeaponCommonState(this);
 
-            controller = new Core.FSMController<WeaponController, eStates>(this);
+            controller = new Core.FSMController<Weapon, eStates>(this);
             controller.RegisterState(eStates.Idle, new WeaponIdle());
             controller.RegisterState(eStates.Shoot, new WeaponShoot());
             controller.RegisterState(eStates.Reload, new WeaponReload());
@@ -58,9 +60,9 @@ namespace GTA
             Core.QLogger.Assert(Inputs.muzzlePositionAndDirection != null);
         }
 
-        public void UnEquip()
+        public void UnInitialize()
         {
-
+            // do something
         }
 
         public void Update()
@@ -75,7 +77,7 @@ namespace GTA
                 controller.Notify(arguments);
         }
 
-        private Core.FSMController<WeaponController, eStates> controller = null;
+        private Core.FSMController<Weapon, eStates> controller = null;
 
     }
 }

@@ -50,7 +50,8 @@ namespace GTA
 
 
         [UnityEngine.Header("Weapons")]
-        public Transform weaponRoot;
+        public Transform leftHandWeaponSlot;
+        public Transform rightHandWeaponSlot;
 
 
         // //private Rigidbody rb;

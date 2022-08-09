@@ -34,6 +34,8 @@ namespace GTA
             }
 
             //so that the same collision doesnt trigger again in the current frame
+            // TODO - not ideal way to do this. a player who is in cooldown wouldnt collide with anything else for that frame.
+            // instead make the other collidable to cooldown. like itemonmap can enter cooldown, which wouldnt need to collided again, but not the player
             a.EnterCooldown();
             b.EnterCooldown();
 
@@ -47,7 +49,6 @@ namespace GTA
         // todo - need a better name 
         interface ICollisionProcessor
         {
-
             bool TryProcess(CollisionProcessor mainProcessor, Core.Collidable a, Core.Collidable b);
         }
         public class PlayerCollisionProcessor : ICollisionProcessor
@@ -79,8 +80,7 @@ namespace GTA
                     {
                         player.WeaponInventory.Collect(itemOnMap.itemOnMapType, itemOnMap.count);
                         itemOnMap.OnItemCollected();
-
-                        player.EquipWeapon(itemOnMap.itemOnMapType);// @todo - not the ideal place for this 
+                        player.OnWeaponCollected(itemOnMap.itemOnMapType);
 
                         Core.QLogger.LogInfo("Item collected : " + other.Name + " of type " + other.Type);
                     }

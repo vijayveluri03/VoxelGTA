@@ -17,6 +17,9 @@ namespace GTA
             BuildPlayerCamera();
             SwitchCameraToThirdPersonView();
             ListenToUserActions();
+
+            // CHEATS
+            player.OnWeaponCollected(eInventoryItem.Pistol);
         }
 
         ~Session()
@@ -65,16 +68,13 @@ namespace GTA
 
             CharacterController controller = new CharacterController();
             controller.Init(charaterModelGO, inputSystem);
-            WeaponController weaponController = new WeaponController(inputSystem);
 
             player = new Player();
-            player.Init(controller, weaponController);
+            player.Init(inputSystem, controller);
 
             //assign player collsion context
             var CollidableComponent = charaterModelGO.GetComponent<Core.Collidable>();
             Core.QLogger.Assert(CollidableComponent != null, "Collidable componet not present on" + charaterModelGO.name);
-
-            //player.EquipWeapon(eInventoryItem.Pistol);
         }
 
         // Dependency - Player has to be build first 
@@ -110,8 +110,10 @@ namespace GTA
         {
             Core.QLogger.Assert(cameraScript != null);
 
-            ThirdPersonCamera.eMode nextMode = cameraScript.Mode;
-            switch (cameraScript.Mode)
+            ThirdPersonCamera.eMode nextMode =  ThirdPersonCamera.eMode.UNDEFINED;
+            ThirdPersonCamera.eMode currentMode = cameraScript.IsTransisioning ? cameraScript.NextMode : cameraScript.Mode;
+
+            switch (currentMode)
             {
                 case ThirdPersonCamera.eMode.UNDEFINED:
                     nextMode = ThirdPersonCamera.eMode.THIRD_PERSON_CENTER;
@@ -130,6 +132,26 @@ namespace GTA
                     break;
             }
             cameraScript.TransitionToMode(nextMode);
+
+            // Adjusting the weapon slot accordingly
+            switch(nextMode)
+            {
+                case ThirdPersonCamera.eMode.THIRD_PERSON_CENTER:
+                    player.TrySwitchPrimaryWeaponHand(Player.eWeaponSlot.RIGHT);
+                    break;
+                case ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_LEFT:
+                    player.TrySwitchPrimaryWeaponHand(Player.eWeaponSlot.RIGHT);
+                    break;
+                case ThirdPersonCamera.eMode.THIRD_PERSON_OFFSET_RIGHT:
+                    player.TrySwitchPrimaryWeaponHand(Player.eWeaponSlot.LEFT);
+                    break;
+                case ThirdPersonCamera.eMode.FIRST_PERSON:
+                    player.TrySwitchPrimaryWeaponHand(Player.eWeaponSlot.RIGHT);
+                    break;
+                default:
+                    Core.QLogger.Assert(false);
+                    break;
+            }
         }
 
 #if DEBUG

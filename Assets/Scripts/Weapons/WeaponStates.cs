@@ -7,14 +7,14 @@ namespace GTA
 
     public class WeaponCommonState
     {
-        public WeaponCommonState(WeaponController owner)
+        public WeaponCommonState(Weapon owner)
         {
             this.owner = owner;
         }
 
         #region Animation
 
-        public void SetAnimation(WeaponController.eStates state)
+        public void SetAnimation(Weapon.eStates state)
         {
             if (previousState != state)
                 animator.SetInteger("AnimationState", (int)state);
@@ -22,7 +22,7 @@ namespace GTA
             previousState = state;
         }
 
-        public void SetAnimation(WeaponController.eStates state, float time)
+        public void SetAnimation(Weapon.eStates state, float time)
         {
             if (previousState != state)
             {
@@ -32,7 +32,7 @@ namespace GTA
             previousState = state;
         }
 
-        private WeaponController.eStates previousState = 0;
+        private Weapon.eStates previousState = 0;
         public UnityEngine.Animator animator { get { return owner.Animator; } }
 
         #endregion
@@ -75,11 +75,11 @@ namespace GTA
             SetBulletRemainingcount(inputs.magCapacity);
         }
         public int bulletsRemainingInMag { get; private set; }
-        private WeaponController owner;
+        private Weapon owner;
         public WeaponInputs inputs { get { return owner.Inputs; } }
     }
 
-    public class WeaponCore : Core.FSMCState<WeaponController, WeaponController.eStates>
+    public class WeaponCore : Core.FSMCState<Weapon, Weapon.eStates>
     {
         public Transform transform { get { return Owner.GameObject.transform; } }
         public GameObject gameObject { get { return Owner.GameObject; } }
@@ -111,7 +111,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            CommonState.SetAnimation(WeaponController.eStates.Idle);
+            CommonState.SetAnimation(Weapon.eStates.Idle);
             Core.QLogger.LogWarning("WeaponIdle");
         }
 
@@ -121,12 +121,12 @@ namespace GTA
 
             if (InputSystem.IsPressed(eInputAction.ACTION_1))
             {
-                SetState(WeaponController.eStates.Shoot);
+                SetState(Weapon.eStates.Shoot);
             }
             if (InputSystem.IsPressed(eInputAction.RELOAD))
             {
                 if (!CommonState.IsMagazineFull())
-                    SetState(WeaponController.eStates.Reload);
+                    SetState(Weapon.eStates.Reload);
             }
 
         }
@@ -141,12 +141,12 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            CommonState.SetAnimation(WeaponController.eStates.Shoot);
+            CommonState.SetAnimation(Weapon.eStates.Shoot);
             Core.QLogger.LogWarning("WeaponIdleWalk");
 
             // Fire one bullet and go to recoil
             CommonState.FireBullet(1 /* accuracy */);
-            SetState(WeaponController.eStates.Recoil);
+            SetState(Weapon.eStates.Recoil);
         }
 
 
@@ -169,7 +169,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            CommonState.SetAnimation(WeaponController.eStates.Reload);
+            CommonState.SetAnimation(Weapon.eStates.Reload);
             time = 0;
         }
 
@@ -180,9 +180,9 @@ namespace GTA
             if (time >= inputs.reloadTime)
             {
                 if (Input.GetMouseButton(0) && CommonState.CanAutoShootNextBullet() && !CommonState.IsMagazineEmpty())
-                    SetState(WeaponController.eStates.Shoot);
+                    SetState(Weapon.eStates.Shoot);
                 else
-                    SetState(WeaponController.eStates.Idle);
+                    SetState(Weapon.eStates.Idle);
             }
         }
 
@@ -199,7 +199,7 @@ namespace GTA
         public override void OnEnter(params object[] arguments)
         {
             base.OnEnter(arguments);
-            CommonState.SetAnimation(WeaponController.eStates.Recoil);
+            CommonState.SetAnimation(Weapon.eStates.Recoil);
             Core.QLogger.LogWarning("WeaponRecoil");
             recoilTime = 0;
         }
@@ -212,11 +212,11 @@ namespace GTA
             {
                 //todo hardcode 
                 if (Input.GetMouseButton(0) && CommonState.CanAutoShootNextBullet() && !CommonState.IsMagazineEmpty())
-                    SetState(WeaponController.eStates.Shoot);
+                    SetState(Weapon.eStates.Shoot);
                 else if (CommonState.IsMagazineEmpty())
-                    SetState(WeaponController.eStates.Reload);
+                    SetState(Weapon.eStates.Reload);
                 else
-                    SetState(WeaponController.eStates.Idle);
+                    SetState(Weapon.eStates.Idle);
             }
         }
 

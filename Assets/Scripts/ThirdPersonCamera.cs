@@ -49,6 +49,38 @@ namespace GTA
             }
         }
 
+        public eMode NextMode
+        {
+            get
+            {
+                if ( !nextMode.HasValue)
+                    return eMode.UNDEFINED;
+                return nextMode.Value;
+            }
+        }
+
+        public bool IsTransisioning
+        {
+            get;
+            private set;
+        }       // Is Transitioning from one mode to the next 
+
+
+        public Vector3 LookAtDirection
+        {
+            get
+            {
+                return transform.forward;
+            }
+        }
+        public Vector3 Position
+        {
+            get
+            {
+                return transform.position;
+            }
+        }
+
         void Awake()
         {
             foreach (var modeProperties in modePropertiesArr)
@@ -66,7 +98,7 @@ namespace GTA
         {
             currentMode = mode;
             nextMode = null;
-            isTransisioning = false;
+            IsTransisioning = false;
         }
         public void TransitionToMode(eMode mode)
         {
@@ -77,7 +109,7 @@ namespace GTA
             Core.QLogger.Assert(modesMap.ContainsKey(mode));
 
             nextMode = mode;
-            isTransisioning = true;
+            IsTransisioning = true;
             currentTransitionTime = 0;
         }
 
@@ -86,7 +118,7 @@ namespace GTA
         void LateUpdate()
         {
             UpdateVerticalRotation();
-            if (isTransisioning)
+            if (IsTransisioning)
             {
                 UpdateTransition();
             }
@@ -105,7 +137,7 @@ namespace GTA
             if(currentTransitionTime >= transitionProperties.transitionTime )
             {
                 currentTransitionTime = transitionProperties.transitionTime;
-                isTransisioning = false;
+                IsTransisioning = false;
                 currentMode = nextMode;
             }
 
@@ -173,7 +205,6 @@ namespace GTA
 
 
         // TRANSITION
-        bool isTransisioning = false;       // Is Transitioning from one mode to the next 
         float currentTransitionTime = 0;
 
         // SHARED MODEL

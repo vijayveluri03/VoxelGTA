@@ -63,6 +63,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Lookups\Weapon.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Lookups\HandlerTypes.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\Knockdown.cs" />
+    <Compile Include="Assets\Scripts\Weapons\WeaponCameraMediator.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\InstantActionHandler.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterAnimatorEvents.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\AnimationVariations.cs" />
@@ -78,7 +79,6 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Null.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Lookups\Animations\AnimatorTrigger.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperStateMachine.cs" />
-    <Compile Include="Assets\Scripts\CharacterAndWeapons\Character.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterMovementController.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Lookups\CharacterState.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\Code\SimpleStateMachine.cs" />
@@ -123,7 +123,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Extensions\AnimatorExtensions.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\DiveRoll.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperCollider.cs" />
-    <Compile Include="Assets\Scripts\Weapons\WeaponController.cs" />
+    <Compile Include="Assets\Scripts\Weapons\Weapon.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\HitContext.cs" />
     <Compile Include="Assets\CoreLib\InputSystem.cs" />
     <Compile Include="Assets\Scripts\Application.cs" />
@@ -135,7 +135,7 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Lookups\AnimationParameters.cs" />
     <Compile Include="Assets\CoreLib\Collisions\CollisionDispatcher.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\Move.cs" />
-    <Compile Include="Assets\Scripts\CharacterAndWeapons\CharacterInputs.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterInputs.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\Code\PlayerCamera.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Lookups\Animations\DiveRollType.cs" />
     <Compile Include="Assets\CoreLib\UI\UIManager.cs" />
@@ -150,19 +150,19 @@
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\BruteForceMesh.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\CoroutineQueue.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\DoubleJump.cs" />
-    <Compile Include="Assets\Scripts\CharacterAndWeapons\Player.cs" />
+    <Compile Include="Assets\Scripts\Character\Player.cs" />
     <Compile Include="Assets\CoreLib\UnityIncludes.cs" />
     <Compile Include="Assets\Scripts\InputSystem.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\Movement\GetHit.cs" />
     <Compile Include="Assets\ExternalPackages\VoxelAnimals\Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterWeaponController.cs" />
     <Compile Include="Assets\Scripts\Weapons\WeaponStates.cs" />
-    <Compile Include="Assets\Scripts\CharacterAndWeapons\CharacterController.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterController.cs" />
     <Compile Include="Assets\CoreLib\UI\UIPanel.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\SimpleActionHandler.cs" />
     <Compile Include="Assets\CoreLib\Utils\Extensions.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\Demo Elements\Code\NoJumpSlime.cs" />
-    <Compile Include="Assets\Scripts\CharacterAndWeapons\CharacterStates.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterStates.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperCharacterController.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\Actions\ActionHandler.cs" />
     <Compile Include="Assets\Scripts\GameStates\States\InGameState.cs" />
@@ -170,7 +170,6 @@
     <Compile Include="Assets\CoreLib\FSMStateMachine\FSMController.cs" />
     <Compile Include="Assets\CoreLib\Collisions\IICollisionContext.cs" />
     <Compile Include="Assets\ExternalPackages\ExplosiveLLC\RPG Character Mecanim Animation Pack FREE\Code\RPGCharacterController.cs" />
-    <Compile Include="Assets\Scripts\CharacterAndWeapons\WeaponStates.cs" />
     <Compile Include="Assets\Scripts\Items\PropOnMap.cs" />
   </ItemGroup>
   <ItemGroup>
